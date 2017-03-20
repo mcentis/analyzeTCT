@@ -11,6 +11,7 @@
 class MeasurementConditions : public TObject
 {
   friend class ConversionClass;
+  friend class AnalysisClass;
   
  private:
     std::map<std::string, std::string> _condMap;
