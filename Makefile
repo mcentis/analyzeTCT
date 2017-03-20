@@ -37,3 +37,6 @@ $(OBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.cc # create a object $(OBJDIR)/%.o from t
 
 clean:
 	rm -f $(TARGETS) $(wildcard $(OBJDIR)/*)
+
+clear:
+	rm -f $(wildcard $(INCLUDEDIR)/*~) $(wildcard $(SRCDIR)/*~)
