@@ -61,7 +61,7 @@ ConversionClass::ConversionClass(char* fileName)
 
   _set = 0;
   _event = 0;
-  
+
   return;
 }
 
@@ -81,7 +81,7 @@ void ConversionClass::ReadFile()
     // looling for configuration stuff
     delimPos = line.find(":");
     if(delimPos != std::string::npos){
-      _confMap[line.substr(0, delimPos)] = line.substr(delimPos + 1, line.size());
+      _measCond._condMap[line.substr(0, delimPos)] = line.substr(delimPos + 1, line.size());
       continue;
     }
 
@@ -97,6 +97,8 @@ void ConversionClass::ReadFile()
       
   }//while(_fileStr.eof() == false)
 
+  _tree->GetUserInfo()->AddAt(&_measCond, 0);
+  
   double dTime;
   int iPoint;
 
@@ -154,12 +156,10 @@ void ConversionClass::ReadFile()
   return;
 }
 
-void ConversionClass::DumpConfMap()
+void ConversionClass::DumpCondMap()
 {
-  std::map<std::string, std::string>::iterator it;
-  for(it = _confMap.begin(); it != _confMap.end(); ++it)
-    std::cout << (*it).first << " => " << (*it).second << std::endl;
-
+  _measCond.DumpCondMap();
+  
   return;
 }
 

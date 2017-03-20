@@ -11,7 +11,7 @@ int main(int argc, char** argv)
   
   ConversionClass* ccl = new ConversionClass(argv[1]);
   ccl->ReadFile();
-  ccl->DumpConfMap();
+  ccl->DumpCondMap();
   
   delete ccl;
   

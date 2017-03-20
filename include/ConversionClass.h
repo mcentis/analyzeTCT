@@ -8,19 +8,21 @@
 #include "TTree.h"
 #include "TFile.h"
 
+#include "MeasurementConditions.h"
+
 class ConversionClass
 {
  public:
   ConversionClass(char* fileName);
   ~ConversionClass();
   void ReadFile();
-  void DumpConfMap();
+  void DumpCondMap();
   
  private:
   std::string _fileName;
   std::ifstream _fileStr;
 
-  std::map<std::string, std::string> _confMap;
+  MeasurementConditions _measCond;
   
   TTree* _tree;
   TFile* _outFile;
