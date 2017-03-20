@@ -3,6 +3,8 @@
 #include "iostream"
 #include "sstream"
 
+#include "TObjString.h"
+
 ConversionClass::ConversionClass(char* fileName)
 {
   _fileName = std::string(fileName);
@@ -81,7 +83,9 @@ void ConversionClass::ReadFile()
     // looling for configuration stuff
     delimPos = line.find(":");
     if(delimPos != std::string::npos){
-      _measCond._condMap[line.substr(0, delimPos)] = line.substr(delimPos + 1, line.size());
+      TObjString* key = new TObjString( line.substr(0, delimPos).c_str() );
+      TObjString* val = new TObjString( line.substr(delimPos + 1, line.size()).c_str() );
+      _condMap.Add((TObject*) key, (TObject*) val);
       continue;
     }
 
@@ -97,7 +101,7 @@ void ConversionClass::ReadFile()
       
   }//while(_fileStr.eof() == false)
 
-  _tree->GetUserInfo()->AddAt(&_measCond, 0);
+  _tree->GetUserInfo()->AddAt(&_condMap, 0);
   
   double dTime;
   int iPoint;
@@ -158,8 +162,7 @@ void ConversionClass::ReadFile()
 
 void ConversionClass::DumpCondMap()
 {
-  _measCond.DumpCondMap();
-  
+  _condMap.Dump();  
   return;
 }
 

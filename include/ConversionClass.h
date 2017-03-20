@@ -2,9 +2,9 @@
 #define CONVERSIONCLASS_H
 
 #include "string"
-#include "map"
 #include "fstream"
 
+#include "TMap.h"
 #include "TTree.h"
 #include "TFile.h"
 
@@ -22,7 +22,7 @@ class ConversionClass
   std::string _fileName;
   std::ifstream _fileStr;
 
-  MeasurementConditions _measCond;
+  TMap _condMap;
   
   TTree* _tree;
   TFile* _outFile;
