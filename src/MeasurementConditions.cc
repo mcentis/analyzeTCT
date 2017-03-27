@@ -2,6 +2,18 @@
 
 #include "iostream"
 
+ClassImp(MeasurementConditions)
+
+MeasurementConditions::MeasurementConditions()
+{
+  return;
+}
+
+MeasurementConditions::~MeasurementConditions()
+{
+  return;
+}
+
 void MeasurementConditions::DumpCondMap()
 {
   std::map<std::string, std::string>::iterator it;

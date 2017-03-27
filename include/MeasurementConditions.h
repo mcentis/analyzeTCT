@@ -10,15 +10,19 @@
 
 class MeasurementConditions : public TObject
 {
+ public:
   friend class ConversionClass;
   friend class AnalysisClass;
   
- private:
-    std::map<std::string, std::string> _condMap;
+  // private:
+  std::map<std::string, std::string> _condMap;
     
- public:
-    void DumpCondMap();
-  
+    // public:
+  MeasurementConditions();
+  ~MeasurementConditions();
+  void DumpCondMap();
+    
+  ClassDef(MeasurementConditions, 1);
 };
 
 #endif //#ifndef MEASUREMENTCONDITIONS_H
