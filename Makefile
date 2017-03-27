@@ -27,7 +27,7 @@ all: $(TARGETS)
 
 $(TARGETS): $(EXECUTABLEDIR)/%: $(OBJDIR)/%.o $(OBJECTS) $(OBJDIR)/Dict.so # the dict is necessary to let root use the cluster structure in the root ttree
 	@echo "\tLinking "$@
-	@$(LINKER) $< $(OBJECTS) $(LDFLAGS) -o $@
+	@$(LINKER) $< $(OBJECTS) $(OBJDIR)/Dict.so $(LDFLAGS) -o $@
 
 $(TARGETS_OBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "\tCompiling "$<
