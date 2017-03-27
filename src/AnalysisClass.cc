@@ -11,8 +11,6 @@ AnalysisClass::AnalysisClass(char* fileName)
     exit(1);
   }
 
-  std::cout << "1" << std::endl;
-  
   _tree = (TTree*) _inFile->Get("TCTtree");
 
   _npt = 1e6;
@@ -46,14 +44,8 @@ AnalysisClass::AnalysisClass(char* fileName)
   _tree->SetBranchAddress("rep", &_rep);
   _tree->SetBranchAddress("event", &_event);
 
-  std::cout << "2" << std::endl;
-
   _measCond = (MeasurementConditions*) _tree->GetUserInfo()->At(0);
-  std::cout << "3" << std::endl;
-
   _measCond->DumpCondMap();
-
-  std::cout << "4" << std::endl;
 
   return;
 }
