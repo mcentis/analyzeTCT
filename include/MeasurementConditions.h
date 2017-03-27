@@ -6,18 +6,15 @@
 
 #include "TObject.h"
 
-//#include "ConversionClass.h"
-
 class MeasurementConditions : public TObject
 {
- public:
   friend class ConversionClass;
   friend class AnalysisClass;
   
-  // private:
+ private:
   std::map<std::string, std::string> _condMap;
     
-    // public:
+ public:
   MeasurementConditions();
   ~MeasurementConditions();
   void DumpCondMap();
