@@ -1,5 +1,7 @@
 #include "AnalysisClass.h"
 
+#include "TemperatureTime.h"
+
 #include "iostream"
 
 AnalysisClass::AnalysisClass(char* fileName)
@@ -45,12 +47,55 @@ AnalysisClass::AnalysisClass(char* fileName)
   _tree->SetBranchAddress("event", &_event);
 
   _measCond = (MeasurementConditions*) _tree->GetUserInfo()->At(0);
-  _measCond->DumpCondMap();
+  //_measCond->DumpCondMap();
 
+  // open root file
+  std::string outFileName = _inFileName;
+  std::string rep = std::string("/"); // to be replaced
+  std::string add = std::string("/analyzed"); // replacement
+  std::string::size_type i = outFileName.find_last_of(rep);
+
+  if(i != std::string::npos)
+    outFileName.replace(i, rep.length(), add);
+  else
+    outFileName.insert(0, add);
+  
+  _outFile = TFile::Open(outFileName.c_str(), "RECREATE");
+
+  // create the analysis objects
+  _anaVector.push_back(new TemperatureTime(this, "temperatureTime"));
+  
   return;
 }
 
 AnalysisClass::~AnalysisClass()
 {
+  _outFile->Close();
+  
+  return;
+}
+
+void AnalysisClass::Analyze()
+{
+  long int entries = _tree->GetEntries();
+
+  std::vector<AnalysisPrototype*>::iterator it;
+  
+  for(long int i = 0; i < entries; i++)
+    {
+      _tree->GetEntry(i);
+      for(it = _anaVector.begin(); it != _anaVector.end(); it++)
+	(*it)->AnalysisAction();
+    }
+  
+  return;
+}
+
+void AnalysisClass::Save()
+{
+  std::vector<AnalysisPrototype*>::iterator it;
+  for(it = _anaVector.begin(); it != _anaVector.end(); it++)
+    (*it)->Save();
+  
   return;
 }

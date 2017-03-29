@@ -5,8 +5,11 @@
 #include "TTree.h"
 
 #include "string"
+#include "vector"
 
 #include "MeasurementConditions.h"
+
+class AnalysisPrototype; // use this instead of #include "AnalysisPrototype.h" to avoid errors in compilation
 
 class AnalysisClass
 {
@@ -14,14 +17,21 @@ class AnalysisClass
   AnalysisClass(char* fileName);
   ~AnalysisClass();
   
+  void Analyze();
+  void Save();
+  
  private:
   TTree* _tree;
   TFile* _inFile;
-  TFile* _outFile;
+
+  std::string _inFileName;
+  std::vector<AnalysisPrototype*> _anaVector;
+
+ public: // this stuff needs to be public to allow access from other classes
+
+  TFile* _outFile; // here to save stuff after analysis
 
   MeasurementConditions* _measCond;
-  
-  std::string _inFileName;
   
   // ======================== variables for the tree
 

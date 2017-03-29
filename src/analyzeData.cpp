@@ -10,7 +10,9 @@ int main(int argc, char** argv)
   }
 
   AnalysisClass* ancl = new AnalysisClass(argv[1]);
-
+  ancl->Analyze();
+  ancl->Save();
+  
   delete ancl;
   
   return 0;
