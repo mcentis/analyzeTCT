@@ -1,10 +1,10 @@
-#include "TemperatureTime.h"
+#include "ConditionsTime.h"
 
 #include "TDirectory.h"
 #include "TCanvas.h"
 #include "TAxis.h"
 
-TemperatureTime::TemperatureTime(AnalysisClass* acl, const char* dirName)
+ConditionsTime::ConditionsTime(AnalysisClass* acl, const char* dirName)
   : AnalysisPrototype(acl, dirName)
 {
   _chillerSetTtime = new TGraph();
@@ -28,7 +28,7 @@ TemperatureTime::TemperatureTime(AnalysisClass* acl, const char* dirName)
   return;
 }
 
-TemperatureTime::~TemperatureTime()
+ConditionsTime::~ConditionsTime()
 {
   delete _chillerSetTtime;
   delete _chillerInternTime;
@@ -40,7 +40,7 @@ TemperatureTime::~TemperatureTime()
   return;
 }
 
-void TemperatureTime::AnalysisAction()
+void ConditionsTime::AnalysisAction()
 {
   _chillerSetTtime->SetPoint(_acl->_event, _acl->_timeStamp, _acl->_chillerSetT);
   _chillerInternTime->SetPoint(_acl->_event, _acl->_timeStamp, _acl->_chillerIntern);
@@ -52,7 +52,7 @@ void TemperatureTime::AnalysisAction()
   return;
 }
 
-void TemperatureTime::Save()
+void ConditionsTime::Save()
 {
   PutAxisLabels(_chillerSetTtime);
   PutAxisLabels(_chillerInternTime);
@@ -75,7 +75,7 @@ void TemperatureTime::Save()
   return;
 }
 
-void TemperatureTime::PutAxisLabels(TGraph* gr)
+void ConditionsTime::PutAxisLabels(TGraph* gr)
 {
   TCanvas* can = new TCanvas();
   gr->Draw("apl");

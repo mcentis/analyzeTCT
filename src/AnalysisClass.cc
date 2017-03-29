@@ -1,6 +1,6 @@
 #include "AnalysisClass.h"
 
-#include "TemperatureTime.h"
+#include "ConditionsTime.h"
 
 #include "iostream"
 
@@ -63,7 +63,7 @@ AnalysisClass::AnalysisClass(char* fileName)
   _outFile = TFile::Open(outFileName.c_str(), "RECREATE");
 
   // create the analysis objects
-  _anaVector.push_back(new TemperatureTime(this, "temperatureTime"));
+  _anaVector.push_back(new ConditionsTime(this, "conditionsTime"));
   
   return;
 }

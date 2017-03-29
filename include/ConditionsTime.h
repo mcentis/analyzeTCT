@@ -1,5 +1,5 @@
-#ifndef TEMPERATURETIME_H
-#define TEMPERATURETIME_H
+#ifndef CONDITIONSTIME_H
+#define CONDITIONSTIME_H
 
 #include "AnalysisPrototype.h"
 
@@ -7,11 +7,11 @@
 
 class AnalysisClass;
 
-class TemperatureTime : public AnalysisPrototype
+class ConditionsTime : public AnalysisPrototype
 {
  public:
-  TemperatureTime(AnalysisClass* acl, const char* dirName);
-  ~TemperatureTime();
+  ConditionsTime(AnalysisClass* acl, const char* dirName);
+  ~ConditionsTime();
   void AnalysisAction();
   void Save();
   
@@ -26,4 +26,4 @@ class TemperatureTime : public AnalysisPrototype
   void PutAxisLabels(TGraph* gr);
 };
 
-#endif //#ifndef TEMPERATURETIME_H
+#endif //#ifndef CONDITIONSTIME_H
