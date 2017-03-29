@@ -23,7 +23,14 @@ class ConditionsTime : public AnalysisPrototype
   TGraph* _pcbTtime;
   TGraph* _copperTtime;
 
-  void PutAxisLabels(TGraph* gr);
+  TGraph* _xTime;
+  TGraph* _yTime;
+  TGraph* _zTime;
+
+  TGraph* _ampliVtime;
+  TGraph* _ampliItime;
+  
+  void PutAxisLabels(TGraph* gr, const char* xtitle, const char* ytitle);
 };
 
 #endif //#ifndef CONDITIONSTIME_H
