@@ -1,6 +1,7 @@
 #include "AnalysisClass.h"
 
 #include "ConditionsTime.h"
+#include "TimingStudy.h"
 
 #include "iostream"
 
@@ -66,6 +67,7 @@ AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
 
   // create the analysis objects
   _anaVector.push_back(new ConditionsTime(this, "conditionsTime"));
+  _anaVector.push_back(new TimingStudy(this, "timingStudy"));
   
   return;
 }
