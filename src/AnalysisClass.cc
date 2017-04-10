@@ -14,7 +14,7 @@ AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
     exit(1);
   }
 
-  _cfgAnalysis = new ConfigFileReader(cfgFile);
+  _cfgAnalysis = new ConfigFileReader(cfgFile); // read config file
   
   _tree = (TTree*) _inFile->Get("TCTtree");
 
