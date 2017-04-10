@@ -99,16 +99,16 @@ void TimingStudy::AnalysisAction()
 
   }
 
-  _bl1 = calcBaseline(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _nbStart1, _nbStop1);
+  _bl1 = CalcBaseline(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _nbStart1, _nbStop1);
   _baseline1->Fill(_bl1);
 
-  _bl2 = calcBaseline(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _nbStart2, _nbStop2);
+  _bl2 = CalcBaseline(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _nbStart2, _nbStop2);
   _baseline2->Fill(_bl2);
 
-  findMax(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _ampli1, _maxPos1);
+  FindMax(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _ampli1, _maxPos1);
   _ampli1 -= _bl1;
   
-  findMax(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _ampli2, _maxPos2);
+  FindMax(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _ampli2, _maxPos2);
   _ampli2 -= _bl2;
   
   return;
@@ -131,7 +131,7 @@ void TimingStudy::Save()
   return;
 }
 
-double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop)
+double TimingStudy::CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop)
 {
   double sum = 0;
   int count = 0;
@@ -144,7 +144,7 @@ double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol,
   return pol * sum/count;
 }
 
-void TimingStudy::findMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos)
+void TimingStudy::FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos)
 {
   int ptPos = -1;
   double maximum = -1e6;
