@@ -19,7 +19,7 @@ class TimingStudy : public AnalysisPrototype
   //=================================== functions ===============================
   //void calcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
   //double integrateSignal(Double_t* tra, Double_t* tim, Int_t n, double start, double stop, double offset);
-  //void findMax(Double_t* tra, Double_t* tim, Int_t n, double& max, double& maxpos);
+  void findMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos);
   double calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop);
   //double calcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, double thr, double offset);
 
@@ -60,6 +60,14 @@ class TimingStudy : public AnalysisPrototype
   // baseline
   double _bl1;
   double _bl2;
+
+  //amplitude
+  double _ampli1;
+  double _ampli2;
+
+  //position of maximum
+  double _maxPos1;
+  double _maxPos2;
   
   //========================= histograms ===============================
   // superimposition of pulses

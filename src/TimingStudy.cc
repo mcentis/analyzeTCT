@@ -104,6 +104,12 @@ void TimingStudy::AnalysisAction()
 
   _bl2 = calcBaseline(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _nbStart2, _nbStop2);
   _baseline2->Fill(_bl2);
+
+  findMax(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _ampli1, _maxPos1);
+  _ampli1 -= _bl1;
+  
+  findMax(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _ampli2, _maxPos2);
+  _ampli2 -= _bl2;
   
   return;
 }
@@ -136,4 +142,34 @@ double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol,
     }
  
   return pol * sum/count;
+}
+
+void TimingStudy::findMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos)
+{
+  int ptPos = -1;
+  double maximum = -1e6;
+  for(int i = 0; i < n; ++i)
+    if(pol * tra[i] > maximum){
+      maximum = pol * tra[i];
+      ptPos = i;
+    }
+  
+  // interpolation using points near maximum
+  // function y = a x**2 + b x + c
+  double y1 = tra[ptPos - 1];
+  double y2 = tra[ptPos];
+  double y3 = tra[ptPos + 1];
+  double x1 = tim[ptPos - 1];
+  double x2 = tim[ptPos];
+  double x3 = tim[ptPos + 1];
+
+  double a = ( y3-y1 - (y2-y1)*(x3-x1)/(x2-x1) ) / ( pow(x3,2)-pow(x1,2) - (pow(x2,2)-pow(x1,2))*(x3-x1)/(x2-x1) );
+  double b = ( y2-y1 - a*(pow(x2,2)-pow(x1,2)) ) / (x2-x1);
+  double c = y1 - a*pow(x1,2) - b*x1;
+  
+  max = - pow(b,2)/(4*a) + c;
+  max *= pol;
+  maxpos = -b/(2*a);
+    
+  return;
 }
