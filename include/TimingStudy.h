@@ -20,7 +20,7 @@ class TimingStudy : public AnalysisPrototype
   //void calcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
   //double integrateSignal(Double_t* tra, Double_t* tim, Int_t n, double start, double stop, double offset);
   //void findMax(Double_t* tra, Double_t* tim, Int_t n, double& max, double& maxpos);
-  double calcBaseline(Double_t* tra, Double_t* tim, Int_t n, double start, double stop);
+  double calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop);
   //double calcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, double thr, double offset);
 
   //====================== analysis variables from cfg file ======================  

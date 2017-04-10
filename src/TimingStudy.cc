@@ -99,12 +99,10 @@ void TimingStudy::AnalysisAction()
 
   }
 
-  _bl1 = calcBaseline(_acl->_trace1, _acl->_time1, _acl->_npt, _nbStart1, _nbStop1);
-  _bl1 *= _pol1;
+  _bl1 = calcBaseline(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _nbStart1, _nbStop1);
   _baseline1->Fill(_bl1);
 
-  _bl2 = calcBaseline(_acl->_trace2, _acl->_time2, _acl->_npt, _nbStart2, _nbStop2);
-  _bl2 *= _pol2;
+  _bl2 = calcBaseline(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _nbStart2, _nbStop2);
   _baseline2->Fill(_bl2);
   
   return;
@@ -127,7 +125,7 @@ void TimingStudy::Save()
   return;
 }
 
-double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, double start, double stop)
+double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop)
 {
   double sum = 0;
   int count = 0;
@@ -137,5 +135,5 @@ double TimingStudy::calcBaseline(Double_t* tra, Double_t* tim, Int_t n, double s
       count++;
     }
  
-  return sum/count;
+  return pol * sum/count;
 }
