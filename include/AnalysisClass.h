@@ -8,13 +8,14 @@
 #include "vector"
 
 #include "MeasurementConditions.h"
+#include "ConfigFileReader.h"
 
 class AnalysisPrototype; // use this instead of #include "AnalysisPrototype.h" to avoid errors in compilation
 
 class AnalysisClass
 {
  public:
-  AnalysisClass(char* fileName);
+  AnalysisClass(const char* fileName, const char* cfgFile);
   ~AnalysisClass();
   
   void Analyze();
@@ -32,6 +33,7 @@ class AnalysisClass
   TFile* _outFile; // here to save stuff after analysis
 
   MeasurementConditions* _measCond;
+  ConfigFileReader* _cfgAnalysis;
   
   // ======================== variables for the tree
 

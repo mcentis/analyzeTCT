@@ -4,7 +4,7 @@
 
 #include "iostream"
 
-AnalysisClass::AnalysisClass(char* fileName)
+AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
 {
   _inFileName = std::string(fileName);
   _inFile = TFile::Open(_inFileName.c_str());
@@ -13,6 +13,8 @@ AnalysisClass::AnalysisClass(char* fileName)
     exit(1);
   }
 
+  _cfgAnalysis = new ConfigFileReader(cfgFile);
+  
   _tree = (TTree*) _inFile->Get("TCTtree");
 
   _npt = 1e6;

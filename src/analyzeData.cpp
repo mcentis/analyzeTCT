@@ -4,12 +4,12 @@
 
 int main(int argc, char** argv)
 {
-  if(argc != 2){
-    std::cout << "\tUsage: analyzeData fileName" << std::endl;
+  if(argc != 3){
+    std::cout << "\tUsage: analyzeData fileName configFile" << std::endl;
     return -1;
   }
 
-  AnalysisClass* ancl = new AnalysisClass(argv[1]);
+  AnalysisClass* ancl = new AnalysisClass(argv[1], argv[2]);
   ancl->Analyze();
   ancl->Save();
   

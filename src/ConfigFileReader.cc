@@ -1,4 +1,4 @@
-#include "ConfigFileReader.hh"
+#include "ConfigFileReader.h"
 
 #include "iostream"
 #include "stdlib.h"
