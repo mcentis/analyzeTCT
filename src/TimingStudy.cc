@@ -325,9 +325,9 @@ void TimingStudy::InitThrStudy()
   _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
 
   //======================== LED thresholds
-  const int thrBins = 49;
-  double thrMin = 10e-3;
-  double thrMax = 0.5;
+  const int thrBins = 25;
+  double thrMin = 0.01;
+  double thrMax = 0.51;
   _neventsLEDthr = new TH2D("neventsLEDthr", ";Thr 1 [V];Thr 2 [V];Entries", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
   _timeDiffMeanLEDthr = new TH2D("timeDiffMeanLEDthr", ";Thr 1 [V];Thr 2 [V];Mean #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
   _timeDiffStdDevLEDthr = new TH2D("timeDiffStdDevLEDthr", ";Thr 1 [V];Thr 2 [V];Std Dev #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
