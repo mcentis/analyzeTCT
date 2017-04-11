@@ -437,6 +437,7 @@ void TimingStudy::WriteThrStudy()
   _timeDiffStdDevCFDfrac->Write();
   _bestCFDdistr->Write();
 
+  _neventsLEDthr->Write();
   _timeDiffMeanLEDthr->Write();
   _timeDiffStdDevLEDthr->Write();
   _bestLEDdistr->Write();
