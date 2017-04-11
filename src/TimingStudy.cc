@@ -94,7 +94,12 @@ TimingStudy::~TimingStudy()
   delete _timeDiffMeanCFDfrac;
   delete _timeDiffStdDevCFDfrac;
   delete _bestCFDdistr;
-  
+
+  delete _neventsLEDthr;
+  delete _timeDiffMeanLEDthr;
+  delete _timeDiffStdDevLEDthr;
+  delete _bestLEDdistr;
+
   return;
 }
 
@@ -304,7 +309,7 @@ void TimingStudy::FillRiseTime_RiseTimeAmpli()
 
 void TimingStudy::InitThrStudy()
 {
-  // CFD study
+  //======================== CFD thresholds
   const int fracBins = 19;
   double fracMin = 0.025;
   double fracMax = 0.975;
@@ -318,6 +323,23 @@ void TimingStudy::InitThrStudy()
     _dtCFDfrac[i] = new std::vector<double>[fracBins + 2];
 
   _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
+
+  //======================== LED thresholds
+  const int thrBins = 49;
+  double thrMin = 10e-3;
+  double thrMax = 0.5;
+  _neventsLEDthr = new TH2D("neventsLEDthr", ";Thr 1 [V];Thr 2 [V];Entries", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
+  _timeDiffMeanLEDthr = new TH2D("timeDiffMeanLEDthr", ";Thr 1 [V];Thr 2 [V];Mean #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
+  _timeDiffStdDevLEDthr = new TH2D("timeDiffStdDevLEDthr", ";Thr 1 [V];Thr 2 [V];Std Dev #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
+
+  for(int i = 0; i < _timeDiffMeanLEDthr->GetNbinsX(); ++i)
+    _LEDthrVec.push_back(_timeDiffMeanLEDthr->GetXaxis()->GetBinCenter(i+1)); // threshold vector
+
+  _dtLEDthr = new std::vector<double>*[thrBins + 2]; // underflow and overflow bins
+  for(int i = 0; i < thrBins + 2; ++i)
+    _dtLEDthr[i] = new std::vector<double>[thrBins + 2];
+
+  _bestLEDdistr = new TH1D("bestLEDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
   
   return;
 }
@@ -329,16 +351,29 @@ void TimingStudy::FillThrStudy()
 
   //======================= CFD thresholds
   for(unsigned int i = 0; i < _CFDfracVec.size(); ++i)
-      for(unsigned int j = 0; j < _CFDfracVec.size(); ++j){
-	t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _CFDfracVec[i] * _ampli1, _bl1);
-	t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _CFDfracVec[j] * _ampli2, _bl2);
-
-	iBin = _timeDiffMeanCFDfrac->GetXaxis()->FindBin(_CFDfracVec[i]);
-	jBin = _timeDiffMeanCFDfrac->GetYaxis()->FindBin(_CFDfracVec[j]);
-
-	_dtCFDfrac[iBin][jBin].push_back(t2-t1);
+    for(unsigned int j = 0; j < _CFDfracVec.size(); ++j){
+      t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _CFDfracVec[i] * _ampli1, _bl1);
+      t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _CFDfracVec[j] * _ampli2, _bl2);
+      
+      iBin = _timeDiffMeanCFDfrac->GetXaxis()->FindBin(_CFDfracVec[i]);
+      jBin = _timeDiffMeanCFDfrac->GetYaxis()->FindBin(_CFDfracVec[j]);
+      
+      _dtCFDfrac[iBin][jBin].push_back(t2-t1);
+    }
+  
+  //======================= LED thresholds
+  for(unsigned int i = 0; i < _LEDthrVec.size(); ++i)
+    for(unsigned int j = 0; j < _LEDthrVec.size(); ++j)
+      if(_ampli1 > _LEDthrVec[i] * 1.05 && _ampli2 > _LEDthrVec[j] * 1.05){ // the maximum is at least 5% bigger than the threshold
+	t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _LEDthrVec[i], _bl1);
+	t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _LEDthrVec[j], _bl2);
+	
+	iBin = _timeDiffMeanLEDthr->GetXaxis()->FindBin(_LEDthrVec[i]);
+	jBin = _timeDiffMeanLEDthr->GetYaxis()->FindBin(_LEDthrVec[j]);
+	
+	_dtLEDthr[iBin][jBin].push_back(t2-t1);
       }
-
+  
   return;
 }
 
@@ -366,10 +401,32 @@ void TimingStudy::ProcessThrStudy()
   bestThr2 = _timeDiffStdDevCFDfrac->GetYaxis()->GetBinCenter(yBin);
 
   CalcMeanStdDev(_dtCFDfrac[xBin][yBin], mean, stdDev, Emean, EstdDev);
-  sprintf(title, "Thr1 %.2F, Thr2 %.2F, #sigma = %.2F #pm %.2F ps, %i events", bestThr1, bestThr2, stdDev * 1e12, EstdDev * 1e12, (int) _dtCFDfrac[xBin][yBin].size());
+  sprintf(title, "CFD: Thr1 %.2F, Thr2 %.2F, #sigma = %.2F #pm %.2F ps, %i events", bestThr1, bestThr2, stdDev * 1e12, EstdDev * 1e12, (int) _dtCFDfrac[xBin][yBin].size());
   _bestCFDdistr->SetTitle(title);
   for(std::vector<double>::iterator it = _dtCFDfrac[xBin][yBin].begin(); it != _dtCFDfrac[xBin][yBin].end(); ++it)
     _bestCFDdistr->Fill(*it);
+
+  //====================== LED thresholds
+  nBins = _timeDiffMeanLEDthr->GetNbinsX() + 2;
+  for(int i = 0; i < nBins; ++i)
+    for(int j = 0; j < nBins; ++j){
+      if(_dtLEDthr[i][j].size() == 0) continue;
+      CalcMeanStdDev(_dtLEDthr[i][j], mean, stdDev, Emean, EstdDev);
+      _neventsLEDthr->SetBinContent(i, j, _dtLEDthr[i][j].size());
+      _timeDiffMeanLEDthr->SetBinContent(i, j, mean);
+      _timeDiffStdDevLEDthr->SetBinContent(i, j, stdDev);
+    }
+
+  // fill distr of best threshold settings
+  _timeDiffStdDevLEDthr->GetMinimumBin(xBin, yBin, zBin);
+  bestThr1 = _timeDiffStdDevLEDthr->GetXaxis()->GetBinCenter(xBin);
+  bestThr2 = _timeDiffStdDevLEDthr->GetYaxis()->GetBinCenter(yBin);
+
+  CalcMeanStdDev(_dtLEDthr[xBin][yBin], mean, stdDev, Emean, EstdDev);
+  sprintf(title, "LED: Thr1 %.0F mV, Thr2 %.0F mV, #sigma = %.2F #pm %.2F ps, %i events", bestThr1 * 1e3, bestThr2 * 1e3, stdDev * 1e12, EstdDev * 1e12, (int) _dtLEDthr[xBin][yBin].size());
+  _bestLEDdistr->SetTitle(title);
+  for(std::vector<double>::iterator it = _dtLEDthr[xBin][yBin].begin(); it != _dtLEDthr[xBin][yBin].end(); ++it)
+    _bestLEDdistr->Fill(*it);
 
   return;
 }
@@ -380,6 +437,9 @@ void TimingStudy::WriteThrStudy()
   _timeDiffStdDevCFDfrac->Write();
   _bestCFDdistr->Write();
 
+  _timeDiffMeanLEDthr->Write();
+  _timeDiffStdDevLEDthr->Write();
+  _bestLEDdistr->Write();
   
   return;
 }

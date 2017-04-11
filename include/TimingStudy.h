@@ -108,6 +108,14 @@ class TimingStudy : public AnalysisPrototype
   std::vector<double> _CFDfracVec; // threshold vector
   std::vector<double>** _dtCFDfrac; // time differences
   TH1D* _bestCFDdistr;
+
+  //============================= threshold study LED =============
+  TH2D* _neventsLEDthr;
+  TH2D* _timeDiffMeanLEDthr;
+  TH2D* _timeDiffStdDevLEDthr;
+  std::vector<double> _LEDthrVec;
+  std::vector<double>** _dtLEDthr;
+  TH1D* _bestLEDdistr;
   
 };
 
