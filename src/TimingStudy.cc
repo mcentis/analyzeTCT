@@ -93,6 +93,7 @@ TimingStudy::~TimingStudy()
 
   delete _timeDiffMeanCFDfrac;
   delete _timeDiffStdDevCFDfrac;
+  delete _bestCFDdistr;
   
   return;
 }
@@ -315,6 +316,8 @@ void TimingStudy::InitThrStudy()
   _dtCFDfrac = new std::vector<double>*[fracBins + 2]; // underflow and overflow bins
   for(int i = 0; i < fracBins + 2; ++i)
     _dtCFDfrac[i] = new std::vector<double>[fracBins + 2];
+
+  _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
   
   return;
 }
@@ -343,7 +346,10 @@ void TimingStudy::ProcessThrStudy()
 {
   int nBins;
   double mean, stdDev, Emean, EstdDev;
-
+  int xBin, yBin, zBin;
+  double bestThr1, bestThr2;
+  char title[200];
+  
   //====================== CFD thresholds
   nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
@@ -353,6 +359,17 @@ void TimingStudy::ProcessThrStudy()
       _timeDiffMeanCFDfrac->SetBinContent(i, j, mean);
       _timeDiffStdDevCFDfrac->SetBinContent(i, j, stdDev);
     }
+  
+  // fill distr of best threshold settings
+  _timeDiffStdDevCFDfrac->GetMinimumBin(xBin, yBin, zBin);
+  bestThr1 = _timeDiffStdDevCFDfrac->GetXaxis()->GetBinCenter(xBin);
+  bestThr2 = _timeDiffStdDevCFDfrac->GetYaxis()->GetBinCenter(yBin);
+
+  CalcMeanStdDev(_dtCFDfrac[xBin][yBin], mean, stdDev, Emean, EstdDev);
+  sprintf(title, "Thr1 %.2F, Thr2 %.2F, #sigma = %.2F #pm %.2F ps, %i events", bestThr1, bestThr2, stdDev * 1e12, EstdDev * 1e12, (int) _dtCFDfrac[xBin][yBin].size());
+  _bestCFDdistr->SetTitle(title);
+  for(std::vector<double>::iterator it = _dtCFDfrac[xBin][yBin].begin(); it != _dtCFDfrac[xBin][yBin].end(); ++it)
+    _bestCFDdistr->Fill(*it);
 
   return;
 }
@@ -361,7 +378,9 @@ void TimingStudy::WriteThrStudy()
 {
   _timeDiffMeanCFDfrac->Write();
   _timeDiffStdDevCFDfrac->Write();
+  _bestCFDdistr->Write();
 
+  
   return;
 }
 

@@ -107,7 +107,8 @@ class TimingStudy : public AnalysisPrototype
   TH2D* _timeDiffStdDevCFDfrac;
   std::vector<double> _CFDfracVec; // threshold vector
   std::vector<double>** _dtCFDfrac; // time differences
-
+  TH1D* _bestCFDdistr;
+  
 };
 
 #endif //#ifndef TIMINGSTUDY_H
