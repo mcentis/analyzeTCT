@@ -5,6 +5,8 @@
 
 #include "TH2D.h"
 
+#include "vector"
+
 class AnalysisClass;
 
 class TimingStudy : public AnalysisPrototype
@@ -17,12 +19,12 @@ class TimingStudy : public AnalysisPrototype
 
  private:
   //=================================== functions ===============================
-  //void calcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
-  //double integrateSignal(Double_t* tra, Double_t* tim, Int_t n, double start, double stop, double offset);
+  void CalcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
   void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos);
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop);
-  //double calcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, double thr, double offset);
-
+  double CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, int pol, double thr, double offset); // thr and offset must have already the right polarity
+  void FillRiseTime_RiseTimeAmpli();
+  
   //====================== analysis variables from cfg file ======================  
   // cuts in space
   double _xcutLo;
@@ -75,12 +77,24 @@ class TimingStudy : public AnalysisPrototype
   TH2D* _supPulse2;
 
   // noise
-  TH1D* _noise1;
-  TH1D* _noise2;
+  TH1D* _noiseDistr1;
+  TH1D* _noiseDistr2;
   
   // baseline
-  TH1D* _baseline1;
-  TH1D* _baseline2;
+  TH1D* _baselineDistr1;
+  TH1D* _baselineDistr2;
+
+  // amplitude
+  TH1D* _ampliDistr1;
+  TH1D* _ampliDistr2;
+
+  // rise time 10 90
+  TH1D* _riseTime1090_1;
+  TH1D* _riseTime1090_2;
+  
+  // rise time 10 90 vs amplitude
+  TH2D* _riseTimeAmpli1;  
+  TH2D* _riseTimeAmpli2;
   
 };
 
