@@ -57,14 +57,14 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _baselineDistr1 = new TH1D("baseline1", ";Voltage [V];Entries", 1000, -0.05, 0.05);
   _baselineDistr2 = new TH1D("baseline2", ";Voltage [V];Entries", 1000, -0.05, 0.05);
 
-  _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 2);
-  _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 2);
+  _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 1.5);
+  _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 1.5);
 
   _riseTime1090_1 = new TH1D("riseTime1090_1", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
   _riseTime1090_2 = new TH1D("riseTime1090_2", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
 
-  _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 2, 1000, 0, 3e-9);
-  _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 2, 1000, 0, 3e-9);
+  _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
+  _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
 
   return;
 }

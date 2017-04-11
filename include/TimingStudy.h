@@ -95,7 +95,13 @@ class TimingStudy : public AnalysisPrototype
   // rise time 10 90 vs amplitude
   TH2D* _riseTimeAmpli1;  
   TH2D* _riseTimeAmpli2;
-  
+
+  // study of CFD thresholds
+  TH2D* _timeDiffMeanCFDfrac; 
+  TH2D* _timeDiffStdDevCFDfrac;
+  std::vector<double> _CFDfracVec; // threshold vector
+  std::vector<double>** _dtCFDfrac; // time differences
+
 };
 
 #endif //#ifndef TIMINGSTUDY_H
