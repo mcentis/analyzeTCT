@@ -23,7 +23,13 @@ class TimingStudy : public AnalysisPrototype
   void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos);
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop);
   double CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, int pol, double thr, double offset); // thr and offset must have already the right polarity
+
   void FillRiseTime_RiseTimeAmpli();
+
+  void InitThrStudy(); // study of thresholds to optimize them
+  void FillThrStudy();
+  void ProcessThrStudy();
+  void WriteThrStudy();
   
   //====================== analysis variables from cfg file ======================  
   // cuts in space
@@ -96,7 +102,7 @@ class TimingStudy : public AnalysisPrototype
   TH2D* _riseTimeAmpli1;  
   TH2D* _riseTimeAmpli2;
 
-  // study of CFD thresholds
+  //============================= threshold study CFD =============
   TH2D* _timeDiffMeanCFDfrac; 
   TH2D* _timeDiffStdDevCFDfrac;
   std::vector<double> _CFDfracVec; // threshold vector

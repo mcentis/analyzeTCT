@@ -66,6 +66,8 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
   _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
 
+  InitThrStudy();
+  
   return;
 }
 
@@ -89,6 +91,9 @@ TimingStudy::~TimingStudy()
   delete _riseTimeAmpli1;
   delete _riseTimeAmpli2;
 
+  delete _timeDiffMeanCFDfrac;
+  delete _timeDiffStdDevCFDfrac;
+  
   return;
 }
 
@@ -131,12 +136,14 @@ void TimingStudy::AnalysisAction()
   _ampliDistr2->Fill(_ampli2);
 
   FillRiseTime_RiseTimeAmpli();
+
+  FillThrStudy();
   
   return;
 }
 
 void TimingStudy::Save()
-{
+{  
   TDirectory* dir = _acl->_outFile->mkdir(_dirName.c_str());
   dir->cd();
 
@@ -157,6 +164,9 @@ void TimingStudy::Save()
   
   _riseTimeAmpli1->Write();
   _riseTimeAmpli2->Write();
+
+  ProcessThrStudy(); // not the best place for this. Dedicated func in prototype?
+  WriteThrStudy();
   
   return;
 }
@@ -290,3 +300,68 @@ void TimingStudy::FillRiseTime_RiseTimeAmpli()
 
   return;
 }
+
+void TimingStudy::InitThrStudy()
+{
+  // CFD study
+  const int fracBins = 19;
+  double fracMin = 0.025;
+  double fracMax = 0.975;
+  _timeDiffMeanCFDfrac = new TH2D("timeDiffMeanCFDfrac", ";CFD frac 1;CFD frac 2;Mean #Delta t [s]", fracBins, fracMin, fracMax, fracBins, fracMin, fracMax);
+  _timeDiffStdDevCFDfrac = new TH2D("timeDiffStdDevCFDfrac", ";CFD frac 1;CFD frac 2;Std Dev #Delta t [s]", fracBins, fracMin, fracMax, fracBins, fracMin, fracMax);
+  for(int i = 0; i < _timeDiffMeanCFDfrac->GetNbinsX(); ++i)
+    _CFDfracVec.push_back(_timeDiffMeanCFDfrac->GetXaxis()->GetBinCenter(i+1)); // threshold vector
+  
+  _dtCFDfrac = new std::vector<double>*[fracBins + 2]; // underflow and overflow bins
+  for(int i = 0; i < fracBins + 2; ++i)
+    _dtCFDfrac[i] = new std::vector<double>[fracBins + 2];
+  
+  return;
+}
+
+void TimingStudy::FillThrStudy()
+{
+  double t1, t2;
+  int iBin, jBin;
+
+  //======================= CFD thresholds
+  for(unsigned int i = 0; i < _CFDfracVec.size(); ++i)
+      for(unsigned int j = 0; j < _CFDfracVec.size(); ++j){
+	t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, _CFDfracVec[i] * _ampli1, _bl1);
+	t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, _CFDfracVec[j] * _ampli2, _bl2);
+
+	iBin = _timeDiffMeanCFDfrac->GetXaxis()->FindBin(_CFDfracVec[i]);
+	jBin = _timeDiffMeanCFDfrac->GetYaxis()->FindBin(_CFDfracVec[j]);
+
+	_dtCFDfrac[iBin][jBin].push_back(t2-t1);
+      }
+
+  return;
+}
+
+void TimingStudy::ProcessThrStudy()
+{
+  int nBins;
+  double mean, stdDev, Emean, EstdDev;
+
+  //====================== CFD thresholds
+  nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;
+  for(int i = 0; i < nBins; ++i)
+    for(int j = 0; j < nBins; ++j){
+      if(_dtCFDfrac[i][j].size() == 0) continue;
+      CalcMeanStdDev(_dtCFDfrac[i][j], mean, stdDev, Emean, EstdDev);
+      _timeDiffMeanCFDfrac->SetBinContent(i, j, mean);
+      _timeDiffStdDevCFDfrac->SetBinContent(i, j, stdDev);
+    }
+
+  return;
+}
+
+void TimingStudy::WriteThrStudy()
+{
+  _timeDiffMeanCFDfrac->Write();
+  _timeDiffStdDevCFDfrac->Write();
+
+  return;
+}
+
