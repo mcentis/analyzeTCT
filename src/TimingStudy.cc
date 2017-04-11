@@ -48,8 +48,8 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _intStop2 = atof(_acl->_cfgAnalysis->GetValue("intStop1").c_str());
 
   //======================================== histos =============================================
-  _supPulse1 = new TH2D("supPulse1", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 2);
-  _supPulse2 = new TH2D("supPulse2", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 2);
+  _supPulse1 = new TH2D("supPulse1", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 1.5);
+  _supPulse2 = new TH2D("supPulse2", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 1.5);
 
   _noiseDistr1 = new TH1D("noise1", ";Voltage [V];Entries", 1000, -0.5, 0.5);
   _noiseDistr2 = new TH1D("noise2", ";Voltage [V];Entries", 1000, -0.5, 0.5);
