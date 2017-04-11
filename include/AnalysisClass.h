@@ -28,6 +28,8 @@ class AnalysisClass
   std::string _inFileName;
   std::vector<AnalysisPrototype*> _anaVector;
 
+  void RootBeautySettings();
+  
  public: // this stuff needs to be public to allow access from other classes
 
   TFile* _outFile; // here to save stuff after analysis

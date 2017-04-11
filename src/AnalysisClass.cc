@@ -5,6 +5,8 @@
 
 #include "iostream"
 
+#include "TStyle.h"
+
 AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
 {
   _inFileName = std::string(fileName);
@@ -15,6 +17,8 @@ AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
   }
 
   _cfgAnalysis = new ConfigFileReader(cfgFile); // read config file
+
+  RootBeautySettings();
   
   _tree = (TTree*) _inFile->Get("TCTtree");
 
@@ -100,6 +104,33 @@ void AnalysisClass::Save()
   std::vector<AnalysisPrototype*>::iterator it;
   for(it = _anaVector.begin(); it != _anaVector.end(); it++)
     (*it)->Save();
+  
+  return;
+}
+
+void AnalysisClass::RootBeautySettings()
+{
+  gStyle->SetOptFit();
+  gStyle->SetOptStat(111110);
+  //gStyle->SetOptFit(0);
+  //gStyle->SetOptStat(0);
+  //gStyle->SetOptTitle(0);
+
+  // big axis labels
+  gStyle->SetLabelSize(0.05, "x");
+  gStyle->SetLabelSize(0.05, "y");
+  gStyle->SetLabelSize(0.05, "z");
+
+  gStyle->SetTitleSize(0.05, "x");
+  gStyle->SetTitleSize(0.05, "y");
+  gStyle->SetTitleSize(0.05, "z");
+
+  gStyle->SetTitleOffset(0.9, "x");
+  // gStyle->SetTitleOffset(0.95, "x");
+  gStyle->SetTitleOffset(0.95, "y");
+
+  gStyle->SetHistFillColor(kBlue);
+  gStyle->SetHistFillStyle(3005);
   
   return;
 }
