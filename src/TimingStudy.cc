@@ -48,17 +48,17 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _intStop2 = atof(_acl->_cfgAnalysis->GetValue("intStop1").c_str());
 
   //======================================== histos =============================================
-  _supPulse1 = new TH2D("supPulse1", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 1.5);
-  _supPulse2 = new TH2D("supPulse2", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 1000, -0.5, 1.5);
+  _supPulse1 = new TH2D("supPulse1", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 2000, -0.15, 1.15);
+  _supPulse2 = new TH2D("supPulse2", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 2000, -0.15, 1.15);
 
-  _noiseDistr1 = new TH1D("noise1", ";Voltage [V];Entries", 1000, -0.5, 0.5);
-  _noiseDistr2 = new TH1D("noise2", ";Voltage [V];Entries", 1000, -0.5, 0.5);
+  _noiseDistr1 = new TH1D("noise1", ";Voltage [V];Entries", 1000, -0.15, 0.15);
+  _noiseDistr2 = new TH1D("noise2", ";Voltage [V];Entries", 1000, -0.15, 0.15);
 
-  _baselineDistr1 = new TH1D("baseline1", ";Voltage [V];Entries", 1000, -0.05, 0.05);
-  _baselineDistr2 = new TH1D("baseline2", ";Voltage [V];Entries", 1000, -0.05, 0.05);
+  _baselineDistr1 = new TH1D("baseline1", ";Voltage [V];Entries", 1000, -0.015, 0.015);
+  _baselineDistr2 = new TH1D("baseline2", ";Voltage [V];Entries", 1000, -0.015, 0.015);
 
-  _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 1.5);
-  _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 1.5);
+  _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 1.15);
+  _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 1.15);
 
   _riseTime1090_1 = new TH1D("riseTime1090_1", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
   _riseTime1090_2 = new TH1D("riseTime1090_2", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
