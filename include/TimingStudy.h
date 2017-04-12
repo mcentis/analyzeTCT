@@ -94,11 +94,11 @@ class TimingStudy : public AnalysisPrototype
   TH1D* _ampliDistr1;
   TH1D* _ampliDistr2;
 
-  // rise time 10 90
-  TH1D* _riseTime1090_1;
-  TH1D* _riseTime1090_2;
+  // rise time 20 80
+  TH1D* _riseTime2080_1;
+  TH1D* _riseTime2080_2;
   
-  // rise time 10 90 vs amplitude
+  // rise time 20 80 vs amplitude
   TH2D* _riseTimeAmpli1;  
   TH2D* _riseTimeAmpli2;
 

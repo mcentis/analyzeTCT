@@ -60,11 +60,11 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 1.15);
   _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 1.15);
 
-  _riseTime1090_1 = new TH1D("riseTime1090_1", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
-  _riseTime1090_2 = new TH1D("riseTime1090_2", ";Rise time 10% 90% [s];Entries", 1000, 0, 3e-9);
+  _riseTime2080_1 = new TH1D("riseTime2080_1", ";Rise time 20% 80% [s];Entries", 1000, 0, 2e-9);
+  _riseTime2080_2 = new TH1D("riseTime2080_2", ";Rise time 20% 80% [s];Entries", 1000, 0, 2e-9);
 
-  _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
-  _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 10% 90% [s];Entries", 1000, -0.1, 1.5, 1000, 0, 3e-9);
+  _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 20% 80% [s];Entries", 1000, -0.1, 1.15, 1000, 0, 2e-9);
+  _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 20% 80% [s];Entries", 1000, -0.1, 1.15, 1000, 0, 2e-9);
 
   InitThrStudy();
   
@@ -85,8 +85,8 @@ TimingStudy::~TimingStudy()
   delete _ampliDistr1;
   delete _ampliDistr2;
 
-  delete _riseTime1090_1;
-  delete _riseTime1090_2;
+  delete _riseTime2080_1;
+  delete _riseTime2080_2;
 
   delete _riseTimeAmpli1;
   delete _riseTimeAmpli2;
@@ -165,8 +165,8 @@ void TimingStudy::Save()
   _ampliDistr1->Write();
   _ampliDistr2->Write();
 
-  _riseTime1090_1->Write();
-  _riseTime1090_2->Write();
+  _riseTime2080_1->Write();
+  _riseTime2080_2->Write();
   
   _riseTimeAmpli1->Write();
   _riseTimeAmpli2->Write();
@@ -292,16 +292,16 @@ void TimingStudy::FillRiseTime_RiseTimeAmpli()
 {
   double t1, t2;
 
-  t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, 0.1 * _ampli1, _bl1);
-  t2 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, 0.9 * _ampli1, _bl1);
+  t1 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, 0.2 * _ampli1, _bl1);
+  t2 = CalcTimeThrLinear2pt(_acl->_trace1, _acl->_time1, _acl->_npt, _pol1, 0.8 * _ampli1, _bl1);
 
-  _riseTime1090_1->Fill(t2-t1);
+  _riseTime2080_1->Fill(t2-t1);
   _riseTimeAmpli1->Fill(_ampli1, t2-t1);
   
-  t1 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, 0.1 * _ampli2, _bl2);
-  t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, 0.9 * _ampli2, _bl2);
+  t1 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, 0.2 * _ampli2, _bl2);
+  t2 = CalcTimeThrLinear2pt(_acl->_trace2, _acl->_time2, _acl->_npt, _pol2, 0.8 * _ampli2, _bl2);
 
-  _riseTime1090_2->Fill(t2-t1);
+  _riseTime2080_2->Fill(t2-t1);
   _riseTimeAmpli2->Fill(_ampli2, t2-t1);
 
   return;
