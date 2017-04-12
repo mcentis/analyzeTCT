@@ -1,6 +1,7 @@
 #include "TimingStudy.h"
 
 #include "stdlib.h"
+#include "iostream"
 
 #include "TDirectory.h"
 
@@ -325,19 +326,39 @@ void TimingStudy::InitThrStudy()
   _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
 
   //======================== LED thresholds
-  const int thrBins = 25;
-  double thrMin = 0.01;
-  double thrMax = 0.51;
-  _neventsLEDthr = new TH2D("neventsLEDthr", ";Thr 1 [V];Thr 2 [V];Entries", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
-  _timeDiffMeanLEDthr = new TH2D("timeDiffMeanLEDthr", ";Thr 1 [V];Thr 2 [V];Mean #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
-  _timeDiffStdDevLEDthr = new TH2D("timeDiffStdDevLEDthr", ";Thr 1 [V];Thr 2 [V];Std Dev #Delta t [s]", thrBins, thrMin, thrMax, thrBins, thrMin, thrMax);
 
+  //binning with two ranges: 0.5 to 10 mV in 1 mV step, the rest in 20 mV step
+  const int thrBins1 = 9;
+  double thrMin1 = 0.0005;
+  double thrMax1 = 0.0095;
+  const int thrBins2 = 25;
+  double thrMin2 = 0.01;
+  double thrMax2 = 0.51;
+
+  const int totThrBins = thrBins1 + thrBins2;
+  double binArray[totThrBins + 1]; // array with the low edges of the bins (+1 to have upper edge of last bin)
+  int iBin = 0;
+
+  for(; iBin < thrBins1; ++iBin)
+    binArray[iBin] = thrMin1 + (thrMax1 - thrMin1) / thrBins1 * iBin;
+  
+  for(; iBin < totThrBins + 1; ++iBin)
+    binArray[iBin] = thrMin2 + (thrMax2 - thrMin2) / thrBins2 * (iBin - thrBins1);
+
+  // for(int i = 0; i < totThrBins + 1; ++i)
+  //   std::cout << binArray[i] << std::endl;
+  
+  _neventsLEDthr = new TH2D("neventsLEDthr", ";Thr 1 [V];Thr 2 [V];Entries", totThrBins, binArray, totThrBins, binArray);
+  _timeDiffMeanLEDthr = new TH2D("timeDiffMeanLEDthr", ";Thr 1 [V];Thr 2 [V];Mean #Delta t [s]", totThrBins, binArray, totThrBins, binArray);
+  _timeDiffStdDevLEDthr = new TH2D("timeDiffStdDevLEDthr", ";Thr 1 [V];Thr 2 [V];Std Dev #Delta t [s]", totThrBins, binArray, totThrBins, binArray);
+
+  
   for(int i = 0; i < _timeDiffMeanLEDthr->GetNbinsX(); ++i)
     _LEDthrVec.push_back(_timeDiffMeanLEDthr->GetXaxis()->GetBinCenter(i+1)); // threshold vector
 
-  _dtLEDthr = new std::vector<double>*[thrBins + 2]; // underflow and overflow bins
-  for(int i = 0; i < thrBins + 2; ++i)
-    _dtLEDthr[i] = new std::vector<double>[thrBins + 2];
+  _dtLEDthr = new std::vector<double>*[totThrBins + 2]; // underflow and overflow bins
+  for(int i = 0; i < totThrBins + 2; ++i)
+    _dtLEDthr[i] = new std::vector<double>[totThrBins + 2];
 
   _bestLEDdistr = new TH1D("bestLEDdistr", ";#Delta t [s];Events", 4000, 0, 5e-9);
   
@@ -381,11 +402,13 @@ void TimingStudy::ProcessThrStudy()
 {
   int nBins;
   double mean, stdDev, Emean, EstdDev;
-  int xBin, yBin, zBin;
+  int xBin, yBin;
   double bestThr1, bestThr2;
+  double minStdDev;
   char title[200];
   
   //====================== CFD thresholds
+  minStdDev = 5e5;
   nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
     for(int j = 0; j < nBins; ++j){
@@ -393,10 +416,15 @@ void TimingStudy::ProcessThrStudy()
       CalcMeanStdDev(_dtCFDfrac[i][j], mean, stdDev, Emean, EstdDev);
       _timeDiffMeanCFDfrac->SetBinContent(i, j, mean);
       _timeDiffStdDevCFDfrac->SetBinContent(i, j, stdDev);
+
+      if(stdDev != 0 && stdDev < minStdDev){ // find best resolution excluding 0s
+	minStdDev = stdDev;
+	xBin = i;
+	yBin = j;
+      }
     }
   
   // fill distr of best threshold settings
-  _timeDiffStdDevCFDfrac->GetMinimumBin(xBin, yBin, zBin);
   bestThr1 = _timeDiffStdDevCFDfrac->GetXaxis()->GetBinCenter(xBin);
   bestThr2 = _timeDiffStdDevCFDfrac->GetYaxis()->GetBinCenter(yBin);
 
@@ -407,6 +435,7 @@ void TimingStudy::ProcessThrStudy()
     _bestCFDdistr->Fill(*it);
 
   //====================== LED thresholds
+  minStdDev = 5e5;
   nBins = _timeDiffMeanLEDthr->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
     for(int j = 0; j < nBins; ++j){
@@ -415,10 +444,15 @@ void TimingStudy::ProcessThrStudy()
       _neventsLEDthr->SetBinContent(i, j, _dtLEDthr[i][j].size());
       _timeDiffMeanLEDthr->SetBinContent(i, j, mean);
       _timeDiffStdDevLEDthr->SetBinContent(i, j, stdDev);
+
+      if(stdDev != 0 && stdDev < minStdDev){ // find best resolution excluding 0s
+	minStdDev = stdDev;
+	xBin = i;
+	yBin = j;
+      }
     }
 
   // fill distr of best threshold settings
-  _timeDiffStdDevLEDthr->GetMinimumBin(xBin, yBin, zBin);
   bestThr1 = _timeDiffStdDevLEDthr->GetXaxis()->GetBinCenter(xBin);
   bestThr2 = _timeDiffStdDevLEDthr->GetYaxis()->GetBinCenter(yBin);
 
