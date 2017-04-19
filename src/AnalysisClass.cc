@@ -183,7 +183,11 @@ void AnalysisClass::CalcPulseProperties()
   
   FindMax(_trace2, _time2, _npt, _pol2, _ampli2, _maxPos2);
   _ampli2 -= _bl2;
-  
+
+  _inte1 = IntegrateSignal(_trace1, _time1, _npt, _pol1, _intStart1, _intStop1, _bl1);
+
+  _inte2 = IntegrateSignal(_trace2, _time2, _npt, _pol2, _intStart2, _intStop2, _bl2);
+
   return;
 }
 
@@ -228,6 +232,19 @@ void AnalysisClass::FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, doub
   maxpos = -b/(2*a);
     
   return;
+}
+
+double AnalysisClass::IntegrateSignal(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double offset)
+{
+  double integral = 0;
+  double dt;
+  for(int i = 1; i < n; i++)
+    if(tim[i] >= start && tim[i] <= stop){
+      dt = tim[i] - tim[i - 1];
+      integral += pol * 0.5 * dt * (tra[i - 1] + tra[i] - 2 * offset);
+    }
+  
+  return integral;
 }
 
 void AnalysisClass::RootBeautySettings()

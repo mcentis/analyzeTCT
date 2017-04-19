@@ -36,6 +36,7 @@ class AnalysisClass
 
   void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos); // waveform amplitude
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop); // waveform baseline
+  double IntegrateSignal(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double offset);
   
  public: // this stuff needs to be public to allow access from other classes
 
@@ -115,13 +116,17 @@ class AnalysisClass
   double _bl1;
   double _bl2;
 
-  //amplitude
+  // amplitude
   double _ampli1;
   double _ampli2;
 
-  //position of maximum
+  // position of maximum
   double _maxPos1;
   double _maxPos2;
+
+  // signal integral
+  double _inte1;
+  double _inte2;
   
 };
 
