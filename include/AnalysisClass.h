@@ -6,6 +6,7 @@
 
 #include "string"
 #include "vector"
+#include "stdlib.h"
 
 #include "MeasurementConditions.h"
 #include "ConfigFileReader.h"
@@ -29,6 +30,12 @@ class AnalysisClass
   std::vector<AnalysisPrototype*> _anaVector;
 
   void RootBeautySettings();
+  void CheckPositionCut();
+  void CalcPulseProperties();
+  void GetValuesFromCfgMap();
+
+  void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos); // waveform amplitude
+  double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop); // waveform baseline
   
  public: // this stuff needs to be public to allow access from other classes
 
@@ -66,6 +73,56 @@ class AnalysisClass
   UInt_t _rep; // repetition counter
   UInt_t _event;
 
+  //====================== analysis variables from cfg file ======================  
+  // cuts in space
+  double _xcutLo;
+  double _xcutHi;
+
+  double _ycutLo;
+  double _ycutHi;
+
+  double _zcutLo;
+  double _zcutHi;
+
+  bool _applyXcut;
+  bool _applyYcut;
+  bool _applyZcut;
+  
+  // pulse polarity for the traces
+  int _pol1;
+  int _pol2;
+
+  // noise, baseline region
+  double _nbStart1;
+  double _nbStop1;
+
+  double _nbStart2;
+  double _nbStop2;
+
+  // integration region for the pulses
+  double _intStart1;
+  double _intStop1;
+
+  double _intStart2;
+  double _intStop2;
+  
+  // ================================ general analysis variables
+
+  // pos cut flag
+  bool _posCutPassed;
+
+  // baseline
+  double _bl1;
+  double _bl2;
+
+  //amplitude
+  double _ampli1;
+  double _ampli2;
+
+  //position of maximum
+  double _maxPos1;
+  double _maxPos2;
+  
 };
 
 #endif //#ifndef ANALYSISCLASS_H
