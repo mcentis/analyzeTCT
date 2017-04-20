@@ -27,6 +27,8 @@ class ConversionClass
   TTree* _tree;
   TFile* _outFile;
 
+  bool _repStartFrom0; // flag used for compatibility with older TCT DAQ
+  
   // ======================== variables for the tree
 
   // traces

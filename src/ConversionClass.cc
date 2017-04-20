@@ -114,7 +114,17 @@ void ConversionClass::ReadFile()
     sstr.str(line);
     sstr >> _timeStamp >> _chillerSetT >> _chillerIntern >> _chillerExtern >> _peltierSetT >> _pcbT >> _copperT >> _biasSet
 	 >> _current >> _biasMeas >> _x >> _y >> _z >> _rep >> _ampliV >> _ampliI;
-    _rep -= 1; // to have counter starting from 0
+
+    if(_event == 0){
+      if(_rep == 0) // check in first event that repetitions start from 0 or not (if not they should start from 1)
+	_repStartFrom0 = true;
+      else
+	_repStartFrom0 = false;
+    }
+    
+    if(_repStartFrom0 == false)
+      _rep -= 1; // to have counter starting from 0
+    
     if(_rep == 0 && _event != 0) // new set, condition on event to have set counter start from 0
       _set++;
 
