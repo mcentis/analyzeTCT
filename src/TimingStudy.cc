@@ -318,6 +318,7 @@ void TimingStudy::ProcessThrStudy()
 
   //====================== CFD thresholds
   minStdDev = 5e5;
+  xBin = yBin = 0;
   nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
     for(int j = 0; j < nBins; ++j){
@@ -345,6 +346,7 @@ void TimingStudy::ProcessThrStudy()
 
   //====================== LED thresholds
   minStdDev = 5e5;
+  xBin = yBin = 0;
   nBins = _timeDiffMeanLEDthr->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
     for(int j = 0; j < nBins; ++j){

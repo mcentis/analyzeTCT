@@ -145,8 +145,7 @@ void AnalysisClass::Analyze()
       }
 	
       if(_set != _currentSet){
-	// process old set
-	for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)
+	for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)// process old set
 	  (*it)->Process();
 
 	SaveSet();// save stuff for this set
