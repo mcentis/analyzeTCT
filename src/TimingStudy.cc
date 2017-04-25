@@ -65,9 +65,8 @@ TimingStudy::~TimingStudy()
 
 void TimingStudy::AnalysisAction()
 {
-  if(_acl->_posCutPassed == false)
-    return;
-  // if arrived till here the event passed the position cut
+  //if(_acl->_posCutPassed == false) // position cut
+  //  return;
   
   for(int i = 0; i < _acl->_npt; ++i){
     _supPulse1->Fill(_acl->_time1[i], _acl->_trace1[i] * _acl->_pol1);
