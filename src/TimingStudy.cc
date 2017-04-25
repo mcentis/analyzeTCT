@@ -95,9 +95,9 @@ void TimingStudy::AnalysisAction()
   return;
 }
 
-void TimingStudy::Save()
+void TimingStudy::Save(TDirectory* parent)
 {  
-  TDirectory* dir = _acl->_outFile->mkdir(_dirName.c_str());
+  TDirectory* dir = parent->mkdir(_dirName.c_str());
   dir->cd();
 
   _supPulse1->Write();
@@ -118,9 +118,15 @@ void TimingStudy::Save()
   _riseTimeAmpli1->Write();
   _riseTimeAmpli2->Write();
 
-  ProcessThrStudy(); // not the best place for this. Dedicated func in prototype?
   WriteThrStudy();
   
+  return;
+}
+
+void TimingStudy::Process()
+{
+  ProcessThrStudy();
+
   return;
 }
 
@@ -309,7 +315,7 @@ void TimingStudy::ProcessThrStudy()
   double bestThr1, bestThr2;
   double minStdDev;
   char title[200];
-  
+
   //====================== CFD thresholds
   minStdDev = 5e5;
   nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;

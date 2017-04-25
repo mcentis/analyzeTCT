@@ -13,7 +13,7 @@ class ConditionsTime : public AnalysisPrototype
   ConditionsTime(AnalysisClass* acl, const char* dirName);
   ~ConditionsTime();
   void AnalysisAction();
-  void Save();
+  void Save(TDirectory* parent);
   
  private:
   TGraph* _chillerSetTtime;

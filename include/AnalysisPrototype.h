@@ -9,9 +9,10 @@ class AnalysisPrototype
 {
  public:
   AnalysisPrototype(AnalysisClass* acl, const char* dirName);
-  ~AnalysisPrototype();
+  virtual ~AnalysisPrototype();
   virtual void AnalysisAction();
-  virtual void Save();
+  virtual void Save(TDirectory* parent);
+  virtual void Process();
   
  protected:
   AnalysisClass* _acl;

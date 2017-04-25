@@ -72,7 +72,7 @@ AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
 
   // create the analysis objects
   _anaVector.push_back(new ConditionsTime(this, "conditionsTime"));
-  _anaVector.push_back(new TimingStudy(this, "timingStudy"));
+  //_anaVector.push_back(new TimingStudy(this, "timingStudy"));
   
   return;
 }
@@ -139,12 +139,41 @@ void AnalysisClass::Analyze()
     {
       _tree->GetEntry(i);
 
+      if(i == 0){ // init first set
+	_currentSet = _set;
+	InitSet();
+      }
+	
+      if(_set != _currentSet){
+	// process old set
+	for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)
+	  (*it)->Process();
+
+	SaveSet();// save stuff for this set
+
+	InitSet();// initialize new objects for this set
+
+	_currentSet = _set;
+      }
+      
       CheckPositionCut(); // set flag for xyz cut
       CalcPulseProperties(); // baseline, amplitude, max pos, integral
-      
-      for(it = _anaVector.begin(); it != _anaVector.end(); it++)
+
+      for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++) // analysis action for set objects
 	(*it)->AnalysisAction();
-    }
+      
+      for(it = _anaVector.begin(); it != _anaVector.end(); it++) // analysis action for whole analysis objects
+	(*it)->AnalysisAction();
+    } // event loop
+
+  for(it = _anaVector.begin(); it != _anaVector.end(); it++) // process whole analysis objects
+    (*it)->Process();
+
+  for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++) // process last set
+    (*it)->Process();
+  
+  SaveSet();// save stuff for last set
+	
   
   return;
 }
@@ -153,8 +182,34 @@ void AnalysisClass::Save()
 {
   std::vector<AnalysisPrototype*>::iterator it;
   for(it = _anaVector.begin(); it != _anaVector.end(); it++)
-    (*it)->Save();
+    (*it)->Save(_outFile);
   
+  return;
+}
+
+void AnalysisClass::InitSet()
+{
+  std::vector<AnalysisPrototype*>::iterator it;
+  for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)
+    delete *it;
+
+  _setAnaVector.clear();
+  
+  _setAnaVector.push_back(new TimingStudy(this, "timingStudy"));
+
+  sprintf(_setDirName, "set_%i_%.1FV_%.2F_%.2F_%.2F_%.1FC", _set, _biasSet, _x, _y, _z, _peltierSetT);
+  
+  return;
+}
+
+void AnalysisClass::SaveSet()
+{
+  TDirectory* dir = _outFile->mkdir(_setDirName);
+
+  std::vector<AnalysisPrototype*>::iterator it;
+  for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)
+    (*it)->Save(dir);
+
   return;
 }
 

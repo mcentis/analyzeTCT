@@ -34,6 +34,12 @@ class AnalysisClass
   void CalcPulseProperties();
   void GetValuesFromCfgMap();
 
+  void InitSet();
+  void SaveSet();
+  std::vector<AnalysisPrototype*> _setAnaVector;
+  unsigned int _currentSet;
+  char _setDirName[200];
+  
   void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos); // waveform amplitude
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop); // waveform baseline
   double IntegrateSignal(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double offset);

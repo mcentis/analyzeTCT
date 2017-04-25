@@ -15,8 +15,9 @@ class TimingStudy : public AnalysisPrototype
   TimingStudy(AnalysisClass* acl, const char* dirName);
   ~TimingStudy();
   void AnalysisAction();
-  void Save();
-
+  void Save(TDirectory* parent);
+  void Process();
+  
  private:
   //=================================== functions ===============================
   void CalcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);

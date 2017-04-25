@@ -100,7 +100,7 @@ void ConditionsTime::AnalysisAction()
   return;
 }
 
-void ConditionsTime::Save()
+void ConditionsTime::Save(TDirectory* parent)
 {
   const char xtitle[20] = "Time stamp";
 
@@ -122,7 +122,7 @@ void ConditionsTime::Save()
   PutAxisLabels(_biasMeasTime, xtitle, "Bias [V]");
   PutAxisLabels(_currentTime, xtitle, "Current [A]");
     
-  TDirectory* dir = _acl->_outFile->mkdir(_dirName.c_str());
+  TDirectory* dir = parent->mkdir(_dirName.c_str());
   dir->cd();
 
   _chillerSetTtime->Write();

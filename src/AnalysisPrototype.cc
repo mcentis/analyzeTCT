@@ -22,9 +22,14 @@ void AnalysisPrototype::AnalysisAction()
   return;
 }
 
-void AnalysisPrototype::Save()
+void AnalysisPrototype::Save(TDirectory* parent)
 {
   std::cout << "Implement Save" << std::endl;
   
   return;
+}
+
+void AnalysisPrototype::Process()
+{
+ return;
 }
