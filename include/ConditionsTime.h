@@ -34,7 +34,6 @@ class ConditionsTime : public AnalysisPrototype
   TGraph* _biasMeasTime;
   TGraph* _currentTime;
   
-  void PutAxisLabels(TGraph* gr, const char* xtitle, const char* ytitle);
 };
 
 #endif //#ifndef CONDITIONSTIME_H

@@ -1,8 +1,6 @@
 #include "ConditionsTime.h"
 
 #include "TDirectory.h"
-#include "TCanvas.h"
-#include "TAxis.h"
 
 ConditionsTime::ConditionsTime(AnalysisClass* acl, const char* dirName)
   : AnalysisPrototype(acl, dirName)
@@ -143,16 +141,5 @@ void ConditionsTime::Save(TDirectory* parent)
   _biasMeasTime->Write();
   _currentTime->Write();
 
-  return;
-}
-
-void ConditionsTime::PutAxisLabels(TGraph* gr, const char* xtitle, const char* ytitle)
-{
-  TCanvas* can = new TCanvas();
-  gr->Draw("apl");
-  gr->GetXaxis()->SetTitle(xtitle);
-  gr->GetYaxis()->SetTitle(ytitle);
-  delete can;
-  
   return;
 }

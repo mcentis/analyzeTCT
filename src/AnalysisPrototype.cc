@@ -2,6 +2,9 @@
 
 #include "iostream"
 
+#include "TCanvas.h"
+#include "TAxis.h"
+
 AnalysisPrototype::AnalysisPrototype(AnalysisClass* acl, const char* dirName)
 {
   _acl = acl;
@@ -99,5 +102,16 @@ void AnalysisPrototype::CalcMeanStdDev(std::vector<double> vec, double& mean, do
     
   EstdDev = 0.5 * Emu2 / sqrt(mu2);
 
+  return;
+}
+
+void AnalysisPrototype::PutAxisLabels(TGraph* gr, const char* xtitle, const char* ytitle)
+{
+  TCanvas* can = new TCanvas();
+  gr->Draw("apl");
+  gr->GetXaxis()->SetTitle(xtitle);
+  gr->GetYaxis()->SetTitle(ytitle);
+  delete can;
+  
   return;
 }
