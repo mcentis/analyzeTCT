@@ -106,7 +106,7 @@ void SigNoiseVsV::SetPointGr(std::vector<double> vec, TGraphErrors* gr, unsigned
 {
   double mean, sigma, Emean, Esigma;
   CalcMeanStdDev(vec, mean, sigma, Emean, Esigma);
-  gr->SetPoint(npt, bias, mean);
+  gr->SetPoint(npt, fabs(bias), fabs(mean));
   gr->SetPointError(npt, Ebias, Emean);
 
   return;
