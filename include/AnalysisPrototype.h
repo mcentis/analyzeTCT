@@ -17,6 +17,10 @@ class AnalysisPrototype
  protected:
   AnalysisClass* _acl;
   std::string _dirName;
+
+  void CalcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
+  double CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, int pol, double thr, double offset); // thr and offset must have already the right polarity
+
 };
 
 

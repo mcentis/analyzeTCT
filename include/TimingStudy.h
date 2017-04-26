@@ -20,9 +20,6 @@ class TimingStudy : public AnalysisPrototype
   
  private:
   //=================================== functions ===============================
-  void CalcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev);
-  double CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, int pol, double thr, double offset); // thr and offset must have already the right polarity
-
   void FillRiseTime_RiseTimeAmpli();
 
   void InitThrStudy(); // study of thresholds to optimize them
