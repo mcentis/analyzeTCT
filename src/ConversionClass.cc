@@ -76,9 +76,9 @@ void ConversionClass::ReadFile()
   while(_fileStr.eof() == false){
     line.clear();
     std::getline(_fileStr, line);
-    if(line.size() == 0) break; // already reached end of file, but the flag is not up yet
+    if(line.size() == 0) continue; // skip empty lines
 
-    // looling for configuration stuff
+    // looking for configuration stuff
     delimPos = line.find(":");
     if(delimPos != std::string::npos){
       _measCond._condMap[line.substr(0, delimPos)] = line.substr(delimPos + 1, line.size());
