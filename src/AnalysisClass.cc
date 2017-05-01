@@ -166,11 +166,18 @@ void AnalysisClass::Analyze()
 	(*it)->AnalysisAction();
     } // event loop
 
+  for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++) // process last set before analysis objects to have quantities ready
+    (*it)->Process();
+
+  _noise1 = _timeStudyInSet->GetNoise1();
+  _noise2 = _timeStudyInSet->GetNoise2();
+
+  _bestResCFD = _timeStudyInSet->GetBestCFDvalues();
+  _bestResLED = _timeStudyInSet->GetBestLEDvalues();
+  
   for(it = _anaVector.begin(); it != _anaVector.end(); it++) // process whole analysis objects
     (*it)->Process();
 
-  for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++) // process last set
-    (*it)->Process();
   
   SaveSet();// save stuff for last set
 	
@@ -194,8 +201,9 @@ void AnalysisClass::InitSet()
     delete *it;
 
   _setAnaVector.clear();
-  
-  _setAnaVector.push_back(new TimingStudy(this, "timingStudy"));
+
+  _timeStudyInSet = new TimingStudy(this, "timingStudy");
+  _setAnaVector.push_back(_timeStudyInSet);
 
   sprintf(_setDirName, "set_%i_%.1FV_%.2F_%.2F_%.2F_%.1FC", _set, _biasSet, _x, _y, _z, _peltierSetT);
   

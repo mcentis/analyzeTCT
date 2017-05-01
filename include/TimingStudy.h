@@ -17,6 +17,12 @@ class TimingStudy : public AnalysisPrototype
   void AnalysisAction();
   void Save(TDirectory* parent);
   void Process();
+
+  // getters
+  double GetNoise1(){return _noiseDistr1->GetStdDev();};
+  double GetNoise2(){return _noiseDistr2->GetStdDev();};
+  std::vector<double> GetBestCFDvalues(); // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
+  std::vector<double> GetBestLEDvalues();
   
  private:
   //=================================== functions ===============================
@@ -26,11 +32,6 @@ class TimingStudy : public AnalysisPrototype
   void FillThrStudy();
   void ProcessThrStudy();
   void WriteThrStudy();
-
-  double GetNoise1(){return _noiseDistr1->GetStdDev();};
-  double GetNoise2(){return _noiseDistr2->GetStdDev();};
-  std::vector<double> GetBestCFDvalues(); // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
-  std::vector<double> GetBestLEDvalues();
   
   //========================= histograms ===============================
   // superimposition of pulses

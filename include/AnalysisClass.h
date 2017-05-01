@@ -12,6 +12,7 @@
 #include "ConfigFileReader.h"
 
 class AnalysisPrototype; // use this instead of #include "AnalysisPrototype.h" to avoid errors in compilation
+class TimingStudy;
 
 class AnalysisClass
 {
@@ -39,6 +40,7 @@ class AnalysisClass
   std::vector<AnalysisPrototype*> _setAnaVector;
   unsigned int _currentSet;
   char _setDirName[200];
+  TimingStudy* _timeStudyInSet; // used to get the info from the timing study objet in the current set (noise and best results from CFD and LED)
   
   void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos); // waveform amplitude
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop); // waveform baseline
@@ -133,6 +135,14 @@ class AnalysisClass
   // signal integral
   double _inte1;
   double _inte2;
+
+  // noise calculated in timing study
+  double _noise1;
+  double _noise2;
+  
+  // best results from timing study
+  std::vector<double> _bestResCFD;
+  std::vector<double> _bestResLED;
   
 };
 
