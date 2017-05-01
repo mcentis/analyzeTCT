@@ -73,10 +73,10 @@ void TimingStudy::AnalysisAction()
     _supPulse2->Fill(_acl->_time2[i], _acl->_trace2[i] * _acl->_pol2);
 
     if(_acl->_time1[i] > _acl->_nbStart1 && _acl->_time1[i] < _acl->_nbStop1)
-      _noiseDistr1->Fill(_acl->_trace1[i] * _acl->_pol1);
+      _noiseDistr1->Fill(_acl->_trace1[i] * _acl->_pol1 - _acl->_bl1);
     
     if(_acl->_time2[i] > _acl->_nbStart2 && _acl->_time2[i] < _acl->_nbStop2)
-      _noiseDistr2->Fill(_acl->_trace2[i] * _acl->_pol2);
+      _noiseDistr2->Fill(_acl->_trace2[i] * _acl->_pol2 - _acl->_bl2);
   }
 
   _baselineDistr1->Fill(_acl->_bl1);
