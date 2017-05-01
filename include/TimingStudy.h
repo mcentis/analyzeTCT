@@ -26,6 +26,9 @@ class TimingStudy : public AnalysisPrototype
   void FillThrStudy();
   void ProcessThrStudy();
   void WriteThrStudy();
+
+  double GetNoise1(){return _noiseDistr1->GetStdDev();};
+  double GetNoise2(){return _noiseDistr2->GetStdDev();};
   
   //========================= histograms ===============================
   // superimposition of pulses
