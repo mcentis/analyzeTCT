@@ -29,6 +29,8 @@ class TimingStudy : public AnalysisPrototype
 
   double GetNoise1(){return _noiseDistr1->GetStdDev();};
   double GetNoise2(){return _noiseDistr2->GetStdDev();};
+  std::vector<double> GetBestCFDvalues(); // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
+  std::vector<double> GetBestLEDvalues();
   
   //========================= histograms ===============================
   // superimposition of pulses
@@ -65,6 +67,13 @@ class TimingStudy : public AnalysisPrototype
   std::vector<double>** _dtCFDfrac; // time differences
   TH1D* _bestCFDdistr;
 
+  double _bestThr1CFD;
+  double _bestThr2CFD;
+  double _bestMeanCFD;
+  double _errBestMeanCFD;
+  double _bestStdDevCFD;
+  double _errBestStdDevCFD;
+  
   //============================= threshold study LED =============
   TH2D* _neventsLEDthr;
   TH2D* _timeDiffMeanLEDthr;
@@ -72,7 +81,14 @@ class TimingStudy : public AnalysisPrototype
   std::vector<double> _LEDthrVec;
   std::vector<double>** _dtLEDthr;
   TH1D* _bestLEDdistr;
-  
+
+  double _bestThr1LED;
+  double _bestThr2LED;
+  double _bestMeanLED;
+  double _errBestMeanLED;
+  double _bestStdDevLED;
+  double _errBestStdDevLED;
+
 };
 
 #endif //#ifndef TIMINGSTUDY_H

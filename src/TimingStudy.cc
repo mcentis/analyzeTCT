@@ -286,7 +286,15 @@ void TimingStudy::ProcessThrStudy()
   _bestCFDdistr->SetTitle(title);
   for(std::vector<double>::iterator it = _dtCFDfrac[xBin][yBin].begin(); it != _dtCFDfrac[xBin][yBin].end(); ++it)
     _bestCFDdistr->Fill(*it);
-
+  
+  // fill variables
+  _bestThr1CFD = bestThr1;
+  _bestThr2CFD = bestThr2;
+  _bestMeanCFD = mean;
+  _errBestMeanCFD = Emean;
+  _bestStdDevCFD = stdDev;
+  _errBestStdDevCFD = EstdDev;
+  
   //====================== LED thresholds
   minStdDev = 5e5;
   xBin = yBin = 0;
@@ -316,6 +324,14 @@ void TimingStudy::ProcessThrStudy()
   for(std::vector<double>::iterator it = _dtLEDthr[xBin][yBin].begin(); it != _dtLEDthr[xBin][yBin].end(); ++it)
     _bestLEDdistr->Fill(*it);
 
+  // fill variables
+  _bestThr1LED = bestThr1;
+  _bestThr2LED = bestThr2;
+  _bestMeanLED = mean;
+  _errBestMeanLED = Emean;
+  _bestStdDevLED = stdDev;
+  _errBestStdDevLED = EstdDev;
+  
   return;
 }
 
@@ -333,3 +349,28 @@ void TimingStudy::WriteThrStudy()
   return;
 }
 
+std::vector<double> TimingStudy::GetBestCFDvalues() // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
+{
+  std::vector<double> ret;
+  ret.push_back(_bestThr1CFD);
+  ret.push_back(_bestThr2CFD);
+  ret.push_back(_bestMeanCFD);
+  ret.push_back(_errBestMeanCFD);
+  ret.push_back(_bestStdDevCFD);
+  ret.push_back(_errBestStdDevCFD);
+
+  return ret;
+}
+
+std::vector<double> TimingStudy::GetBestLEDvalues()
+{
+  std::vector<double> ret;
+  ret.push_back(_bestThr1LED);
+  ret.push_back(_bestThr2LED);
+  ret.push_back(_bestMeanLED);
+  ret.push_back(_errBestMeanLED);
+  ret.push_back(_bestStdDevLED);
+  ret.push_back(_errBestStdDevLED);
+
+  return ret;
+}
