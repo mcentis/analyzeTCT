@@ -11,6 +11,9 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _supPulse1 = new TH2D("supPulse1", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 2000, -0.15, 1.15);
   _supPulse2 = new TH2D("supPulse2", ";Time [s];Voltage [V];Entries", 1000, 0, 100e-9, 2000, -0.15, 1.15);
 
+  _rawNoiseDistr1 = new TH1D("rawNoise1", ";Voltage [V];Entries", 1000, -0.15, 0.15);
+  _rawNoiseDistr2 = new TH1D("rawNoise2", ";Voltage [V];Entries", 1000, -0.15, 0.15);
+
   _noiseDistr1 = new TH1D("noise1", ";Voltage [V];Entries", 1000, -0.15, 0.15);
   _noiseDistr2 = new TH1D("noise2", ";Voltage [V];Entries", 1000, -0.15, 0.15);
 
@@ -36,6 +39,8 @@ TimingStudy::~TimingStudy()
   delete _supPulse1;
   delete _supPulse2;
 
+  delete _rawNoiseDistr1;
+  delete _rawNoiseDistr2;
   delete _noiseDistr1;
   delete _noiseDistr2;
 
@@ -72,11 +77,15 @@ void TimingStudy::AnalysisAction()
     _supPulse1->Fill(_acl->_time1[i], _acl->_trace1[i] * _acl->_pol1);
     _supPulse2->Fill(_acl->_time2[i], _acl->_trace2[i] * _acl->_pol2);
 
-    if(_acl->_time1[i] > _acl->_nbStart1 && _acl->_time1[i] < _acl->_nbStop1)
+    if(_acl->_time1[i] > _acl->_nbStart1 && _acl->_time1[i] < _acl->_nbStop1){
+      _rawNoiseDistr1->Fill(_acl->_trace1[i] * _acl->_pol1);
       _noiseDistr1->Fill(_acl->_trace1[i] * _acl->_pol1 - _acl->_bl1);
+    }
     
-    if(_acl->_time2[i] > _acl->_nbStart2 && _acl->_time2[i] < _acl->_nbStop2)
+    if(_acl->_time2[i] > _acl->_nbStart2 && _acl->_time2[i] < _acl->_nbStop2){
+      _rawNoiseDistr2->Fill(_acl->_trace2[i] * _acl->_pol2);
       _noiseDistr2->Fill(_acl->_trace2[i] * _acl->_pol2 - _acl->_bl2);
+    }
   }
 
   _baselineDistr1->Fill(_acl->_bl1);
@@ -102,9 +111,12 @@ void TimingStudy::Save(TDirectory* parent)
   _supPulse1->Write();
   _supPulse2->Write();
 
+  _rawNoiseDistr1->Write();
+  _rawNoiseDistr2->Write();
+
   _noiseDistr1->Write();
   _noiseDistr2->Write();
-
+  
   _baselineDistr1->Write();
   _baselineDistr2->Write();  
 

@@ -36,9 +36,12 @@ class TimingStudy : public AnalysisPrototype
   TH2D* _supPulse2;
 
   // noise
+  TH1D* _rawNoiseDistr1;
+  TH1D* _rawNoiseDistr2;
+
   TH1D* _noiseDistr1;
   TH1D* _noiseDistr2;
-  
+
   // baseline
   TH1D* _baselineDistr1;
   TH1D* _baselineDistr2;
