@@ -137,8 +137,8 @@ class AnalysisClass
   double _inte2;
 
   // noise calculated in timing study
-  double _noise1;
-  double _noise2;
+  std::vector<double> _noise1;
+  std::vector<double> _noise2;
   
   // best results from timing study
   std::vector<double> _bestResCFD;

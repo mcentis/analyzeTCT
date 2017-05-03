@@ -25,8 +25,8 @@ class SigNoiseVsV : public AnalysisPrototype
   std::vector<std::vector<double>*> _inte1Vec; // integrals
   std::vector<std::vector<double>*> _inte2Vec;
 
-  std::vector<double> _noise1Vec;
-  std::vector<double> _noise2Vec;
+  std::vector<std::vector<double>> _noise1Vec;
+  std::vector<std::vector<double>> _noise2Vec;
   
   TGraphErrors* _ivGr;
   TGraphErrors* _ampli1BiasGr;

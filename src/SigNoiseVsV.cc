@@ -119,8 +119,11 @@ void SigNoiseVsV::Process()
     SetPointGr(*_inte1Vec.at(i), _inte1BiasGr, i, bias, Ebias);
     SetPointGr(*_inte2Vec.at(i), _inte2BiasGr, i, bias, Ebias);
 
-    _noise1BiasGr->SetPoint(i, fabs(bias), _noise1Vec.at(i) * 1e3);
-    _noise2BiasGr->SetPoint(i, fabs(bias), _noise2Vec.at(i) * 1e3);
+    _noise1BiasGr->SetPoint(i, fabs(bias), _noise1Vec.at(i)[0] * 1e3);
+    _noise1BiasGr->SetPointError(i, Ebias, _noise1Vec.at(i)[1] * 1e3);
+    
+    _noise2BiasGr->SetPoint(i, fabs(bias), _noise2Vec.at(i)[0] * 1e3);
+    _noise2BiasGr->SetPointError(i, Ebias, _noise2Vec.at(i)[1] * 1e3);
   }
 
   return;

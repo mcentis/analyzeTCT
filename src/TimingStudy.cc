@@ -374,3 +374,21 @@ std::vector<double> TimingStudy::GetBestLEDvalues()
 
   return ret;
 }
+
+std::vector<double> TimingStudy::GetNoise1() // noise and noise error (error on sigma assuming gaussian distribution)
+{
+  std::vector<double> ret;
+  ret.push_back(_noiseDistr1->GetStdDev());
+  ret.push_back(_noiseDistr1->GetStdDevError());
+  
+  return ret;
+}
+
+std::vector<double> TimingStudy::GetNoise2()
+{
+  std::vector<double> ret;
+  ret.push_back(_noiseDistr2->GetStdDev());
+  ret.push_back(_noiseDistr2->GetStdDevError());
+  
+  return ret;
+}

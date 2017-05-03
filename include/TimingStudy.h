@@ -19,8 +19,8 @@ class TimingStudy : public AnalysisPrototype
   void Process();
 
   // getters
-  double GetNoise1(){return _noiseDistr1->GetStdDev();};
-  double GetNoise2(){return _noiseDistr2->GetStdDev();};
+  std::vector<double> GetNoise1(); // noise and noise error (error on sigma assuming gaussian distribution)
+  std::vector<double> GetNoise2();
   std::vector<double> GetBestCFDvalues(); // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
   std::vector<double> GetBestLEDvalues();
   
