@@ -339,6 +339,10 @@ void AnalysisClass::RootBeautySettings()
 
   gStyle->SetHistFillColor(kBlue);
   gStyle->SetHistFillStyle(3005);
-  
+
+  gStyle->SetMarkerStyle(20);  
+  gStyle->SetMarkerSize(2);
+  gStyle->SetLineWidth(2);
+
   return;
 }
