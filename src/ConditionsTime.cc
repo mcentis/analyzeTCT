@@ -118,7 +118,7 @@ void ConditionsTime::Save(TDirectory* parent)
 
   PutAxisLabels(_biasSetTime, xtitle, "Bias [V]");
   PutAxisLabels(_biasMeasTime, xtitle, "Bias [V]");
-  PutAxisLabels(_currentTime, xtitle, "Current [A]");
+  PutAxisLabels(_currentTime, xtitle, "Current [mA]");
     
   TDirectory* dir = parent->mkdir(_dirName.c_str());
   dir->cd();

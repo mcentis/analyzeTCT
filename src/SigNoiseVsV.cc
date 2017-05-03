@@ -74,7 +74,7 @@ void SigNoiseVsV::Save(TDirectory* parent)
 
   const char* xtitle = "Bias [V]";
   
-  PutAxisLabels(_ivGr, xtitle, "Current [A]");
+  PutAxisLabels(_ivGr, xtitle, "Current [mA]");
   _ivGr->Write();
 
   PutAxisLabels(_ampli1BiasGr, xtitle, "Amplitude [V]");
