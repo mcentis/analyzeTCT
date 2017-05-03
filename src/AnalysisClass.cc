@@ -149,6 +149,12 @@ void AnalysisClass::Analyze()
 	for(it = _setAnaVector.begin(); it != _setAnaVector.end(); it++)// process old set
 	  (*it)->Process();
 
+	_noise1 = _timeStudyInSet->GetNoise1();
+	_noise2 = _timeStudyInSet->GetNoise2();
+	
+	_bestResCFD = _timeStudyInSet->GetBestCFDvalues();
+	_bestResLED = _timeStudyInSet->GetBestLEDvalues();
+	
 	SaveSet();// save stuff for this set
 
 	InitSet();// initialize new objects for this set

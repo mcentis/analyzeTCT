@@ -19,6 +19,12 @@ SigNoiseVsV::SigNoiseVsV(AnalysisClass* acl, const char* dirName)
 
   _inte2BiasGr = new TGraphErrors();
   _inte2BiasGr->SetName("inte2bias");
+
+  _noise1BiasGr = new TGraphErrors();
+  _noise1BiasGr->SetName("noise1Bias");
+  
+  _noise2BiasGr = new TGraphErrors();
+  _noise2BiasGr->SetName("noise2Bias");
   
   return;
 }
@@ -43,8 +49,13 @@ void SigNoiseVsV::AnalysisAction()
     firstCall = false;
   }
 
-  if(_stepVec.back() != _acl->_set)
+  if(_stepVec.back() != _acl->_set){ // new set, store noise data
     NewSet();
+
+    // noise from previous step
+    _noise1Vec.push_back(_acl->_noise1);
+    _noise2Vec.push_back(_acl->_noise2);
+  }
 
   _biasVec.back()->push_back(_acl->_biasMeas);
   _currVec.back()->push_back(_acl->_current);
@@ -78,11 +89,21 @@ void SigNoiseVsV::Save(TDirectory* parent)
   PutAxisLabels(_inte2BiasGr, xtitle, "Integral [Vs]");
   _inte2BiasGr->Write();
 
+  PutAxisLabels(_noise1BiasGr, xtitle, "Noise [mV]");
+  _noise1BiasGr->Write();
+
+  PutAxisLabels(_noise2BiasGr, xtitle, "Noise [mV]");
+  _noise2BiasGr->Write();
+
   return;
 }
 
 void SigNoiseVsV::Process()
 {
+  // get noise from last step
+  _noise1Vec.push_back(_acl->_noise1);
+  _noise2Vec.push_back(_acl->_noise2);
+
   double mean, Emean, sigma, Esigma;
   double bias, Ebias;
   
@@ -97,6 +118,9 @@ void SigNoiseVsV::Process()
     SetPointGr(*_ampli2Vec.at(i), _ampli2BiasGr, i, bias, Ebias);
     SetPointGr(*_inte1Vec.at(i), _inte1BiasGr, i, bias, Ebias);
     SetPointGr(*_inte2Vec.at(i), _inte2BiasGr, i, bias, Ebias);
+
+    _noise1BiasGr->SetPoint(i, fabs(bias), _noise1Vec.at(i) * 1e3);
+    _noise2BiasGr->SetPoint(i, fabs(bias), _noise2Vec.at(i) * 1e3);
   }
 
   return;
