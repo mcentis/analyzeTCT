@@ -3,6 +3,7 @@
 #include "ConditionsTime.h"
 #include "TimingStudy.h"
 #include "SigNoiseVsV.h"
+#include "TimingVsV.h"
 
 #include "iostream"
 
@@ -74,6 +75,7 @@ AnalysisClass::AnalysisClass(const char* fileName, const char* cfgFile)
   // create the analysis objects
   _anaVector.push_back(new ConditionsTime(this, "conditionsTime"));
   _anaVector.push_back(new SigNoiseVsV(this, "sigNoiseVsV"));
+  _anaVector.push_back(new TimingVsV(this, "optimizedTimingVsV"));
   
   return;
 }
