@@ -28,6 +28,12 @@ TimingVsV::TimingVsV(AnalysisClass* acl, const char* dirName)
 
   _stdDevLEDGr = new TGraphErrors();
   _stdDevLEDGr->SetName("stdDevLED");
+
+  _riseTime1Gr = new TGraphErrors();
+  _riseTime1Gr->SetName("riseTime1");
+  
+  _riseTime2Gr = new TGraphErrors();
+  _riseTime2Gr->SetName("riseTime2");
   
   return;
 }
@@ -43,7 +49,10 @@ TimingVsV::~TimingVsV()
   delete _thr2LEDGr;
   delete _meanLEDGr;
   delete _stdDevLEDGr;
-  
+
+  delete _riseTime1Gr;
+  delete _riseTime2Gr;
+
   return;
 }
 
@@ -62,6 +71,7 @@ void TimingVsV::AnalysisAction()
     // data from previous step
     _CFDVec.push_back(_acl->_bestResCFD);
     _LEDVec.push_back(_acl->_bestResLED);
+    _riseTimeVec.push_back(_acl->_riseTimeStep);
   }
 
   _biasVec.back()->push_back(_acl->_biasMeas);
@@ -100,6 +110,12 @@ void TimingVsV::Save(TDirectory* parent)
   PutAxisLabels(_stdDevLEDGr, xtitle, "Std. Dev. [s]");
   _stdDevLEDGr->Write();
 
+  PutAxisLabels(_riseTime1Gr, xtitle, "Rise Time 20% 80% [s]");
+  _riseTime1Gr->Write();
+
+  PutAxisLabels(_riseTime2Gr, xtitle, "Rise Time 20% 80% [s]");
+  _riseTime2Gr->Write();
+
   return;
 }
 
@@ -108,7 +124,8 @@ void TimingVsV::Process()
   // get data from last step
   _CFDVec.push_back(_acl->_bestResCFD);
   _LEDVec.push_back(_acl->_bestResLED);
-
+  _riseTimeVec.push_back(_acl->_riseTimeStep);
+    
   double mean, Emean, sigma, Esigma;
   double bias, Ebias;
   
@@ -137,6 +154,13 @@ void TimingVsV::Process()
     _stdDevLEDGr->SetPoint(i, fabs(bias), _LEDVec.at(i)[4]);
     _stdDevLEDGr->SetPointError(i, Ebias, _LEDVec.at(i)[5]);
 
+    // =============== rise time: rise time 1, error 1, rise time 1, error 2
+    _riseTime1Gr->SetPoint(i, fabs(bias), _riseTimeVec.at(i)[0]);
+    _riseTime1Gr->SetPointError(i, Ebias, _riseTimeVec.at(i)[1]);
+
+    _riseTime2Gr->SetPoint(i, fabs(bias), _riseTimeVec.at(i)[2]);
+    _riseTime2Gr->SetPointError(i, Ebias, _riseTimeVec.at(i)[3]);
+    
   }
 
   return;

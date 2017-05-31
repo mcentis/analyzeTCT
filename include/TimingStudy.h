@@ -23,6 +23,7 @@ class TimingStudy : public AnalysisPrototype
   std::vector<double> GetNoise2();
   std::vector<double> GetBestCFDvalues(); // in order: thr1, thr2, mean, err on mean, stdDev, err on stdDev
   std::vector<double> GetBestLEDvalues();
+  std::vector<double> GetRiseTimes(); // rise time 20% 80% risetime1, error1, risetime2, error2
   
  private:
   //=================================== functions ===============================

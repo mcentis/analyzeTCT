@@ -156,7 +156,8 @@ void AnalysisClass::Analyze()
 	
 	_bestResCFD = _timeStudyInSet->GetBestCFDvalues();
 	_bestResLED = _timeStudyInSet->GetBestLEDvalues();
-	
+	_riseTimeStep = _timeStudyInSet->GetRiseTimes();
+	  
 	SaveSet();// save stuff for this set
 
 	InitSet();// initialize new objects for this set
@@ -182,6 +183,7 @@ void AnalysisClass::Analyze()
 
   _bestResCFD = _timeStudyInSet->GetBestCFDvalues();
   _bestResLED = _timeStudyInSet->GetBestLEDvalues();
+  _riseTimeStep = _timeStudyInSet->GetRiseTimes();
   
   for(it = _anaVector.begin(); it != _anaVector.end(); it++) // process whole analysis objects
     (*it)->Process();

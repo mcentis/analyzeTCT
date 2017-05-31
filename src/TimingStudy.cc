@@ -375,6 +375,17 @@ std::vector<double> TimingStudy::GetBestLEDvalues()
   return ret;
 }
 
+std::vector<double> TimingStudy::GetRiseTimes() // rise time 20% 80% risetime1, error1, risetime2, error2
+{
+  std::vector<double> ret;
+  ret.push_back(_riseTime2080_1->GetMean());
+  ret.push_back(_riseTime2080_1->GetMeanError());
+  ret.push_back(_riseTime2080_2->GetMean());
+  ret.push_back(_riseTime2080_2->GetMeanError());
+
+  return ret;
+}
+
 std::vector<double> TimingStudy::GetNoise1() // noise and noise error (error on sigma assuming gaussian distribution)
 {
   std::vector<double> ret;

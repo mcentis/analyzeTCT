@@ -34,6 +34,10 @@ class TimingVsV : public AnalysisPrototype
   TGraphErrors* _meanLEDGr;
   TGraphErrors* _stdDevLEDGr;
 
+  std::vector<std::vector<double>> _riseTimeVec;
+  TGraphErrors* _riseTime1Gr;
+  TGraphErrors* _riseTime2Gr;
+
   void NewSet();
 
 };

@@ -143,6 +143,9 @@ class AnalysisClass
   // best results from timing study
   std::vector<double> _bestResCFD;
   std::vector<double> _bestResLED;
+
+  // rise time from timing study
+  std::vector<double> _riseTimeStep;
   
 };
 
