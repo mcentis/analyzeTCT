@@ -35,10 +35,12 @@ class SigNoiseVsV : public AnalysisPrototype
   TGraphErrors* _inte2BiasGr;
   TGraphErrors* _noise1BiasGr;
   TGraphErrors* _noise2BiasGr;
-
+  TGraphErrors* _snr1BiasGr;
+  TGraphErrors* _snr2BiasGr;
+  
   void NewSet();
   void SetPointGr(std::vector<double> vec, TGraphErrors* gr, unsigned int npt, double bias, double Ebias);
-  
+  void FillSNRgraph(TGraphErrors* snrGr, TGraphErrors* ampliGr, TGraphErrors* noiseGr);
 };
 
 

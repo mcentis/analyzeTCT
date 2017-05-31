@@ -21,11 +21,17 @@ SigNoiseVsV::SigNoiseVsV(AnalysisClass* acl, const char* dirName)
   _inte2BiasGr->SetName("inte2bias");
 
   _noise1BiasGr = new TGraphErrors();
-  _noise1BiasGr->SetName("noise1Bias");
+  _noise1BiasGr->SetName("noise1bias");
   
   _noise2BiasGr = new TGraphErrors();
-  _noise2BiasGr->SetName("noise2Bias");
-  
+  _noise2BiasGr->SetName("noise2bias");
+
+  _snr1BiasGr = new TGraphErrors();
+  _snr1BiasGr->SetName("snr1bias");
+
+  _snr2BiasGr = new TGraphErrors();
+  _snr2BiasGr->SetName("snr2bias");
+
   return;
 }
 
@@ -36,6 +42,10 @@ SigNoiseVsV::~SigNoiseVsV()
   delete _ampli2BiasGr;
   delete _inte1BiasGr;
   delete _inte2BiasGr;
+  delete _noise1BiasGr;
+  delete _noise2BiasGr;
+  delete _snr1BiasGr;
+  delete _snr2BiasGr;
   
   return;
 }
@@ -95,6 +105,12 @@ void SigNoiseVsV::Save(TDirectory* parent)
   PutAxisLabels(_noise2BiasGr, xtitle, "Noise [mV]");
   _noise2BiasGr->Write();
 
+  PutAxisLabels(_snr1BiasGr, xtitle, "SNR");
+  _snr1BiasGr->Write();
+
+  PutAxisLabels(_snr2BiasGr, xtitle, "SNR");
+  _snr2BiasGr->Write();
+
   return;
 }
 
@@ -126,6 +142,36 @@ void SigNoiseVsV::Process()
     _noise2BiasGr->SetPointError(i, Ebias, _noise2Vec.at(i)[1] * 1e3);
   }
 
+  // snr graphs
+  FillSNRgraph(_snr1BiasGr, _ampli1BiasGr, _noise1BiasGr);
+  FillSNRgraph(_snr2BiasGr, _ampli2BiasGr, _noise2BiasGr);
+
+  return;
+}
+
+void SigNoiseVsV::FillSNRgraph(TGraphErrors* snrGr, TGraphErrors* ampliGr, TGraphErrors* noiseGr)
+{
+  double snr, Esnr;
+
+  int npt = ampliGr->GetN();
+
+  double *bias = ampliGr->GetX();
+  double *Ebias = ampliGr->GetEX();
+  
+  double *sig = ampliGr->GetY();
+  double *Esig = ampliGr->GetEY();
+
+  double *noise = noiseGr->GetY();
+  double *Enoise = noiseGr->GetEY();
+
+  for(int i = 0; i < npt; i++){
+    snr = sig[i]/(noise[i]/1e3); // noise is in mV
+    Esnr = sqrt(pow(Esig[i]/sig[i], 2) + pow(Enoise[i]/noise[i], 2)) * snr;
+
+    snrGr->SetPoint(i, bias[i], snr);
+    snrGr->SetPointError(i, Ebias[i], Esnr);
+  }
+  
   return;
 }
 
