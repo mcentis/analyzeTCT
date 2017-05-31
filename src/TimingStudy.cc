@@ -23,8 +23,8 @@ TimingStudy::TimingStudy(AnalysisClass* acl, const char* dirName)
   _ampliDistr1 = new TH1D("amplitude1", ";Voltage [V];Entries", 1000, -0.1, 1.15);
   _ampliDistr2 = new TH1D("amplitude2", ";Voltage [V];Entries", 1000, -0.1, 1.15);
 
-  _riseTime2080_1 = new TH1D("riseTime2080_1", ";Rise time 20% 80% [s];Entries", 1000, 0, 2e-9);
-  _riseTime2080_2 = new TH1D("riseTime2080_2", ";Rise time 20% 80% [s];Entries", 1000, 0, 2e-9);
+  _riseTime2080_1 = new TH1D("riseTime2080_1", ";Rise time 20% 80% [s];Entries", 5000, 0, 10e-9);
+  _riseTime2080_2 = new TH1D("riseTime2080_2", ";Rise time 20% 80% [s];Entries", 5000, 0, 10e-9);
 
   _riseTimeAmpli1 = new TH2D("riseTimeAmpli1", ";Amplitude [V];Rise time 20% 80% [s];Entries", 1000, -0.1, 1.15, 1000, 0, 2e-9);
   _riseTimeAmpli2 = new TH2D("riseTimeAmpli2", ";Amplitude [V];Rise time 20% 80% [s];Entries", 1000, -0.1, 1.15, 1000, 0, 2e-9);
