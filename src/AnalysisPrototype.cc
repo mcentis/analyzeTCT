@@ -37,6 +37,11 @@ void AnalysisPrototype::Process()
  return;
 }
 
+void AnalysisPrototype::NewSet()
+{
+ return;
+}
+
 double AnalysisPrototype::CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int_t n, int pol, double thr, double offset)
 {
   int i = 0;

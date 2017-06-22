@@ -58,22 +58,6 @@ TimingVsV::~TimingVsV()
 
 void TimingVsV::AnalysisAction()
 {
-  static bool firstCall = true;
-
-  if(firstCall){
-    NewSet();
-    firstCall = false;
-  }
-
-  if(_stepVec.back() != _acl->_set){ // new set, store noise data
-    NewSet();
-
-    // data from previous step
-    _CFDVec.push_back(_acl->_bestResCFD);
-    _LEDVec.push_back(_acl->_bestResLED);
-    _riseTimeVec.push_back(_acl->_riseTimeStep);
-  }
-
   _biasVec.back()->push_back(_acl->_biasMeas);
 
   return;
@@ -129,7 +113,7 @@ void TimingVsV::Process()
   double mean, Emean, sigma, Esigma;
   double bias, Ebias;
   
-  for(unsigned int i = 0; i < _stepVec.size(); ++i){
+  for(unsigned int i = 0; i < _biasVec.size(); ++i){
     CalcMeanStdDev(*_biasVec.at(i), mean, sigma, Emean, Esigma);
 
     bias = mean;
@@ -168,9 +152,19 @@ void TimingVsV::Process()
 
 void TimingVsV::NewSet()
 {
-  _stepVec.push_back(_acl->_set);
+  static bool firstCall = true;
 
   _biasVec.push_back(new std::vector<double>);
+
+  if(firstCall){ // avoid looking for previous step if it is the first step
+    firstCall = false;
+    return;
+  }
+  // data from previous step
+  _CFDVec.push_back(_acl->_bestResCFD);
+  _LEDVec.push_back(_acl->_bestResLED);
+  _riseTimeVec.push_back(_acl->_riseTimeStep);
+  
   
   return;
 }

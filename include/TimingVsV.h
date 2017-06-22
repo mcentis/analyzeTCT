@@ -15,9 +15,9 @@ class TimingVsV : public AnalysisPrototype
   void AnalysisAction();
   void Save(TDirectory* parent);
   void Process();
-
+  void NewSet();
+  
  private:
-  std::vector<unsigned int> _stepVec; // vector containing the steps
   std::vector<std::vector<double>*> _biasVec; // vector with the bias value for each repetition and step
 
   std::vector<std::vector<double>> _CFDVec;
@@ -37,8 +37,6 @@ class TimingVsV : public AnalysisPrototype
   std::vector<std::vector<double>> _riseTimeVec;
   TGraphErrors* _riseTime1Gr;
   TGraphErrors* _riseTime2Gr;
-
-  void NewSet();
 
 };
 

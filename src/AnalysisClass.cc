@@ -216,7 +216,10 @@ void AnalysisClass::InitSet()
   _setAnaVector.push_back(_timeStudyInSet);
 
   sprintf(_setDirName, "set_%i_%.1FV_%.2F_%.2F_%.2F_%.1FC", _set, _biasSet, _x, _y, _z, _peltierSetT);
-  
+
+  for(it = _anaVector.begin(); it != _anaVector.end(); it++) // new set for whole analysis objects
+    (*it)->NewSet();
+
   return;
 }
 

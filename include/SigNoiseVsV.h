@@ -15,9 +15,9 @@ class SigNoiseVsV : public AnalysisPrototype
   void AnalysisAction();
   void Save(TDirectory* parent);
   void Process();
+  void NewSet();
 
  private:
-  std::vector<unsigned int> _stepVec; // vector containing the steps
   std::vector<std::vector<double>*> _biasVec; // vector with the bias value for each repetition and step
   std::vector<std::vector<double>*> _currVec; // vector with the current value for each repetition and step
   std::vector<std::vector<double>*> _ampli1Vec; // amplitudes
@@ -38,7 +38,6 @@ class SigNoiseVsV : public AnalysisPrototype
   TGraphErrors* _snr1BiasGr;
   TGraphErrors* _snr2BiasGr;
   
-  void NewSet();
   void SetPointGr(std::vector<double> vec, TGraphErrors* gr, unsigned int npt, double bias, double Ebias);
   void FillSNRgraph(TGraphErrors* snrGr, TGraphErrors* ampliGr, TGraphErrors* noiseGr);
 };

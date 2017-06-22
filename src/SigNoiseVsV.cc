@@ -52,21 +52,6 @@ SigNoiseVsV::~SigNoiseVsV()
 
 void SigNoiseVsV::AnalysisAction()
 {
-  static bool firstCall = true;
-
-  if(firstCall){
-    NewSet();
-    firstCall = false;
-  }
-
-  if(_stepVec.back() != _acl->_set){ // new set, store noise data
-    NewSet();
-
-    // noise from previous step
-    _noise1Vec.push_back(_acl->_noise1);
-    _noise2Vec.push_back(_acl->_noise2);
-  }
-
   _biasVec.back()->push_back(_acl->_biasMeas);
   _currVec.back()->push_back(_acl->_current);
   _ampli1Vec.back()->push_back(_acl->_ampli1);
@@ -123,7 +108,7 @@ void SigNoiseVsV::Process()
   double mean, Emean, sigma, Esigma;
   double bias, Ebias;
   
-  for(unsigned int i = 0; i < _stepVec.size(); ++i){
+  for(unsigned int i = 0; i < _biasVec.size(); ++i){
     CalcMeanStdDev(*_biasVec.at(i), mean, sigma, Emean, Esigma);
 
     bias = mean;
@@ -187,7 +172,7 @@ void SigNoiseVsV::SetPointGr(std::vector<double> vec, TGraphErrors* gr, unsigned
 
 void SigNoiseVsV::NewSet()
 {
-  _stepVec.push_back(_acl->_set);
+  static bool firstCall = true;
 
   _biasVec.push_back(new std::vector<double>);
   _currVec.push_back(new std::vector<double>);
@@ -195,6 +180,15 @@ void SigNoiseVsV::NewSet()
   _ampli2Vec.push_back(new std::vector<double>);
   _inte1Vec.push_back(new std::vector<double>);
   _inte2Vec.push_back(new std::vector<double>);
+  
+  if(firstCall){ // avoid looking for previous step if it is the first step
+    firstCall = false;
+    return;
+  }
+  // noise from previous step
+  _noise1Vec.push_back(_acl->_noise1);
+  _noise2Vec.push_back(_acl->_noise2);
+
   
   return;
 }
