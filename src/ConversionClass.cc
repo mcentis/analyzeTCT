@@ -3,7 +3,7 @@
 #include "iostream"
 #include "sstream"
 
-ConversionClass::ConversionClass(char* fileName)
+ConversionClass::ConversionClass(char* fileName, int twoPlsCh)
 {
   _fileName = std::string(fileName);
   _fileStr.open(_fileName, std::ifstream::in);
@@ -13,6 +13,12 @@ ConversionClass::ConversionClass(char* fileName)
     exit(1);
   }
 
+  _twoPlsCh = twoPlsCh;
+  if(_twoPlsCh < 0 || _twoPlsCh > 2){
+    std::cout << "[Error] The channel with two pulses does not exist. Ch num: " << _twoPlsCh << std::endl;
+    exit(1);
+  }
+  
   // open root file
   std::string outFileName = _fileName;
   std::string ext = std::string(".txt");
@@ -128,35 +134,95 @@ void ConversionClass::ReadFile()
     if(_rep == 0 && _event != 0) // new set, condition on event to have set counter start from 0
       _set++;
 
-    // first scope trace
-    line.clear();
-    sstr.clear();
-    std::getline(_fileStr, line);
-    sstr.str(line);
-
-    sstr >> dTime;
-    sstr >> _npt;
-
-    iPoint = 0;
-    while(sstr.eof() == false){
-      sstr >> _trace1[iPoint];
-      _time1[iPoint] = dTime * iPoint;
-      iPoint++;
+    if(_twoPlsCh == 0){ // save both channel indepedently
+      // first scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+      sstr.str(line);
+      
+      sstr >> dTime;
+      sstr >> _npt;
+      
+      iPoint = 0;
+      while(sstr.eof() == false){
+	sstr >> _trace1[iPoint];
+	_time1[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
+      
+      // second scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+      sstr.str(line);
+      
+      iPoint = 0;
+      while(sstr.eof() == false){
+	sstr >> _trace2[iPoint];
+	_time2[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
+    }
+    else if(_twoPlsCh == 1){ // save first channel with two pulses
+      // first scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+      sstr.str(line);
+      
+      sstr >> dTime;
+      sstr >> _npt;
+      
+      iPoint = 0;
+      while(sstr.eof() == false && iPoint < (int) _npt/2){
+	sstr >> _trace1[iPoint];
+	_time1[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
+      iPoint = 0;
+      while(sstr.eof() == false && iPoint < (int) _npt/2){
+	sstr >> _trace2[iPoint];
+	_time2[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
+      
+      // second scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+    }
+    else if(_twoPlsCh == 2){ // save second channel with two pulses
+      // first scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+      sstr.str(line);
+      
+      sstr >> dTime;
+      sstr >> _npt;
+      
+      // second scope trace
+      line.clear();
+      sstr.clear();
+      std::getline(_fileStr, line);
+      sstr.str(line);
+      
+      iPoint = 0;
+      while(sstr.eof() == false && iPoint < (int) _npt/2){
+	sstr >> _trace1[iPoint];
+	_time1[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
+      iPoint = 0;
+      while(sstr.eof() == false && iPoint < (int) _npt/2){
+	sstr >> _trace2[iPoint];
+	_time2[iPoint] = dTime * iPoint;
+	iPoint++;
+      }
     }
 
-    // second scope trace
-    line.clear();
-    sstr.clear();
-    std::getline(_fileStr, line);
-    sstr.str(line);
-
-    iPoint = 0;
-    while(sstr.eof() == false){
-      sstr >> _trace2[iPoint];
-      _time2[iPoint] = dTime * iPoint;
-      iPoint++;
-    }
-
+    
     _tree->Fill();
     _event++;
     

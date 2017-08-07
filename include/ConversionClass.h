@@ -13,7 +13,8 @@
 class ConversionClass
 {
  public:
-  ConversionClass(char* fileName);
+  ConversionClass(char* fileName, int twoPlsCh = 0); // file to be converted and selector of ch in case of double pulse on same channel
+                                                        // values for twoPlsCh: 0 -> one pulse per ch, 1, 2 -> channel trace to be considered
   ~ConversionClass();
   void ReadFile();
   void DumpCondMap();
@@ -21,6 +22,7 @@ class ConversionClass
  private:
   std::string _fileName;
   std::ifstream _fileStr;
+  int _twoPlsCh;
 
   MeasurementConditions _measCond;
   
