@@ -175,7 +175,7 @@ void TimingStudy::InitThrStudy()
   for(int i = 0; i < fracBins + 2; ++i)
     _dtCFDfrac[i] = new std::vector<double>[fracBins + 2];
 
-  _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 8000, 0, 10e-9);
+  _bestCFDdistr = new TH1D("bestCFDdistr", ";#Delta t [s];Events", 16000, -10e-9, 10e-9);
 
   //======================== LED thresholds
 
@@ -212,7 +212,7 @@ void TimingStudy::InitThrStudy()
   for(int i = 0; i < totThrBins + 2; ++i)
     _dtLEDthr[i] = new std::vector<double>[totThrBins + 2];
 
-  _bestLEDdistr = new TH1D("bestLEDdistr", ";#Delta t [s];Events", 8000, 0, 10e-9);
+  _bestLEDdistr = new TH1D("bestLEDdistr", ";#Delta t [s];Events", 16000, -10e-9, 10e-9);
   
   return;
 }
