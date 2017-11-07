@@ -186,6 +186,7 @@ void ConversionClass::ReadFile()
 	_time2[iPoint] = dTime * iPoint;
 	iPoint++;
       }
+      _npt = iPoint;
       
       // second scope trace
       line.clear();
@@ -220,6 +221,7 @@ void ConversionClass::ReadFile()
 	_time2[iPoint] = dTime * iPoint;
 	iPoint++;
       }
+      _npt = iPoint;
     }
 
     
