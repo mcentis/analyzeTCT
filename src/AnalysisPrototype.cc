@@ -63,9 +63,8 @@ double AnalysisPrototype::CalcTimeThrLinear2pt(Double_t* tra, Double_t* tim, Int
 
 void AnalysisPrototype::CalcMeanStdDev(std::vector<double> vec, double& mean, double& stdDev, double& Emean, double& EstdDev)
 {
-  int N = vec.size();
-
-  if(N == 0){
+  if(vec.size() == 0){
+    std::cout << "[Warning] AnalysisPrototype::CalcMeanStdDev: Too few entries to calculate anything." << std::endl;
     mean = 0;
     stdDev = 0;
     Emean = 0;
@@ -73,24 +72,43 @@ void AnalysisPrototype::CalcMeanStdDev(std::vector<double> vec, double& mean, do
     return;
   }
 
-  if(N < 4){ // to avoid strange results in error calculation
-    mean = vec[0];
+  int N = 0;
+  double sum = 0;
+  double sumD2 = 0;
+  double sumD4 = 0;
+  
+  for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it){
+    if(*it != *it) // protect from nan
+      continue;
+    
+    sum += *it;
+    N++;
+  }
+  
+  if(N == 0){
+    std::cout << "[Warning] AnalysisPrototype::CalcMeanStdDev: Too few entries to calculate anything due to NAN." << std::endl;
+    mean = 0;
     stdDev = 0;
     Emean = 0;
     EstdDev = 0;
     return;
   }
 
-  double sum = 0;
-  double sumD2 = 0;
-  double sumD4 = 0;
-  
-  for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
-    sum += *it;
-
   mean = sum / N; // mean
 
+  if(N < 4){ // to avoid strange results in error calculation
+    std::cout << "[Warning] AnalysisPrototype::CalcMeanStdDev: Too few entries to calculate uncertainties. Mean " << mean << std::endl;
+    stdDev = 0;
+    Emean = 0;
+    EstdDev = 0;
+    return;
+  }
+
+  
   for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it){
+    if(*it != *it) // protect from nan
+      continue;
+
     sumD2 += pow(*it - mean, 2);
     sumD4 += pow(*it - mean, 4);
   }
