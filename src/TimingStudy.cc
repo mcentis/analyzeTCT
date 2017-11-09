@@ -265,7 +265,7 @@ void TimingStudy::ProcessThrStudy()
   nBins = _timeDiffMeanCFDfrac->GetNbinsX() + 2;
   for(int i = 0; i < nBins; ++i)
     for(int j = 0; j < nBins; ++j){
-      if(_dtLEDthr[i][j].size() <= 4) continue; // avoid warnings from CalcMeanStdDev. 4 is the minimum to calculate all quantities
+      if(_dtCFDfrac[i][j].size() <= 4) continue; // avoid warnings from CalcMeanStdDev. 4 is the minimum to calculate all quantities
       CalcMeanStdDev(_dtCFDfrac[i][j], mean, stdDev, Emean, EstdDev);
       _timeDiffMeanCFDfrac->SetBinContent(i, j, mean);
       _timeDiffStdDevCFDfrac->SetBinContent(i, j, stdDev);
