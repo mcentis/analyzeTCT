@@ -254,10 +254,10 @@ void AnalysisClass::CalcPulseProperties()
   
   _bl2 = CalcBaseline(_trace2, _time2, _npt, _pol2, _nbStart2, _nbStop2);
   
-  FindMax(_trace1, _time1, _npt, _pol1, _ampli1, _maxPos1);
+  FindMax(_trace1, _time1, _npt, _pol1, _intStart1, _intStop1, _ampli1, _maxPos1); // look in the maximum only in the part of wf that is integrated, to reduce noise effects
   _ampli1 -= _bl1;
   
-  FindMax(_trace2, _time2, _npt, _pol2, _ampli2, _maxPos2);
+  FindMax(_trace2, _time2, _npt, _pol2, _intStart2, _intStop2, _ampli2, _maxPos2);
   _ampli2 -= _bl2;
 
   _inte1 = IntegrateSignal(_trace1, _time1, _npt, _pol1, _intStart1, _intStop1, _pol1 * _bl1); // reverse polarity correction for the baseline (the measured value is needed)
@@ -280,15 +280,16 @@ double AnalysisClass::CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int po
   return pol * sum/count;
 }
 
-void AnalysisClass::FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos)
+void AnalysisClass::FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double& max, double& maxpos)
 {
   int ptPos = -1;
   double maximum = -1e6;
   for(int i = 0; i < n; ++i)
-    if(pol * tra[i] > maximum){
-      maximum = pol * tra[i];
-      ptPos = i;
-    }
+    if(tim[i] > start && tim[i] < stop) // confine search in area used for integration
+      if(pol * tra[i] > maximum){
+	maximum = pol * tra[i];
+	ptPos = i;
+      }
   
   // interpolation using points near maximum
   // function y = a x**2 + b x + c

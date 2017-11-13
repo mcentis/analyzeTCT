@@ -42,7 +42,7 @@ class AnalysisClass
   char _setDirName[200];
   TimingStudy* _timeStudyInSet; // used to get the info from the timing study objet in the current set (noise and best results from CFD and LED)
   
-  void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double& max, double& maxpos); // waveform amplitude
+  void FindMax(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double& max, double& maxpos); // waveform amplitude, calculated in the part of wf that is integrated
   double CalcBaseline(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop); // waveform baseline
   double IntegrateSignal(Double_t* tra, Double_t* tim, Int_t n, int pol, double start, double stop, double offset);
   
