@@ -126,8 +126,8 @@ void AnalysisClass::GetValuesFromCfgMap()
   _intStart1 = atof(_cfgAnalysis->GetValue("intStart1").c_str());
   _intStop1 = atof(_cfgAnalysis->GetValue("intStop1").c_str());
   
-  _intStart2 = atof(_cfgAnalysis->GetValue("intStart1").c_str());
-  _intStop2 = atof(_cfgAnalysis->GetValue("intStop1").c_str());
+  _intStart2 = atof(_cfgAnalysis->GetValue("intStart2").c_str());
+  _intStop2 = atof(_cfgAnalysis->GetValue("intStop2").c_str());
 
   return;
 }
@@ -259,7 +259,7 @@ void AnalysisClass::CalcPulseProperties()
   
   FindMax(_trace2, _time2, _npt, _pol2, _intStart2, _intStop2, _ampli2, _maxPos2);
   _ampli2 -= _bl2;
-
+  
   _inte1 = IntegrateSignal(_trace1, _time1, _npt, _pol1, _intStart1, _intStop1, _pol1 * _bl1); // reverse polarity correction for the baseline (the measured value is needed)
 
   _inte2 = IntegrateSignal(_trace2, _time2, _npt, _pol2, _intStart2, _intStop2, _pol2 * _bl2);
